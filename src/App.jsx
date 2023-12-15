@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 import Sidebar, { SidebarItem } from "./components/Sidebar";
-import Home from "./components/Home";
-import Video from "./components/Video";
-import FlashCard from "./components/FlashCard";
-import MiniGame from "./components/MiniGame";
-import AutismTest from "./components/AutismTest";
-import AiChat from "./components/AiChat";
-import Settings from "./components/Settings";
+import Home from "./pages/Home/Home";
+import Video from "./pages/Video/Video";
+import FlashCard from "./pages/FlashCard/FlashCard";
+import MiniGame from "./pages/Mini Game/MiniGame";
+import AutismTest from "./pages/AutismTest/AutismTest";
+import AiChat from "./pages/AiChat/AiChat";
+import Settings from "./pages/Settings/Settings";
 
 import {
   homeIcon,
