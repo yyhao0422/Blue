@@ -1,5 +1,6 @@
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import blueLogo from "../images/logo-blue.png";
+import userLogo from "../images/user-logo.jpg";
 import { useContext, useState, createContext } from "react";
 
 const SidebarContext = createContext();
@@ -35,19 +36,22 @@ export default function Sidebar({ children }) {
 
         {/* This is the bottom client info */}
         <div className="border-t flex p-3">
-          <img
-            src={blueLogo}
-            alt="client logo"
-            className="w-10 h-10 rounded-md"
-          />
+          <div className="w-10 h-10 flex items-center">
+            <img
+              src={userLogo}
+              alt="client logo"
+              className="max-w-full w-auto h-auto rounded-md "
+            />
+          </div>
+
           <div
             className={`flex justify-between items-center overflow-hidden transition-all ${
               isExpended ? "w-52 ml-3" : "w-0"
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">Client Name</h4>
-              <span className="text-xs text-gray-600">client@gmail.com</span>
+              <h4 className="font-semibold">User Name</h4>
+              <span className="text-xs text-gray-600">user@gmail.com</span>
             </div>
             <MoreVertical size={20} />
           </div>
