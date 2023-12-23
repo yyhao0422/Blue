@@ -14,8 +14,8 @@ export default function Sidebar({ children }) {
           {/* Blue Logo */}
           <img
             src={blueLogo}
-            className={`overflow-hidden transition-all ${
-              isExpended ? "w-32" : "w-0"
+            className={`overflow-hidden transition-all pb-4 ${
+              isExpended ? "w-48" : "w-0"
             }`}
             alt=""
           />
