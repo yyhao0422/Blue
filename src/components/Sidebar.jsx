@@ -35,12 +35,12 @@ export default function Sidebar({ children }) {
         </SidebarContext.Provider>
 
         {/* This is the bottom client info */}
-        <div className="border-t flex p-3">
-          <div className="w-10 h-10 flex items-center">
+        <div className={`border-t flex justify-center p-3`}>
+          <div className="w-10 h-10 flex items-center justify-center">
             <img
               src={userLogo}
               alt="client logo"
-              className="max-w-full w-auto h-auto rounded-md "
+              className="max-w-full w-auto h-auto rounded-md"
             />
           </div>
 
