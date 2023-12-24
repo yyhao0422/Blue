@@ -2,11 +2,14 @@ import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import blueLogo from "../images/logo-blue.png";
 import userLogo from "../images/user-logo.jpg";
 import { useContext, useState, createContext } from "react";
+import { UserButton, useUser } from "@clerk/clerk-react";
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
   const [isExpended, setIsExpended] = useState(true);
+
+  const { isSignedIn, user, isLoaded } = useUser();
 
   return (
     <aside
@@ -41,11 +44,7 @@ export default function Sidebar({ children }) {
         {/* This is the bottom client info */}
         <div className={`border-t flex justify-center p-3`}>
           <div className="w-10 h-10 flex items-center justify-center">
-            <img
-              src={userLogo}
-              alt="client logo"
-              className="max-w-full w-auto h-auto rounded-md"
-            />
+            <UserButton />
           </div>
 
           <div
@@ -54,8 +53,10 @@ export default function Sidebar({ children }) {
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">User Name</h4>
-              <span className="text-xs text-gray-600">user@gmail.com</span>
+              <h4 className="font-semibold">{user.fullName}</h4>
+              <span className="text-xs text-gray-600">
+                {user.primaryEmailAddress.emailAddress}
+              </span>
             </div>
             <MoreVertical size={20} />
           </div>
