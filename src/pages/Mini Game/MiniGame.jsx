@@ -110,7 +110,7 @@ function MiniGame() {
           />
           <Player
             initialName={PLAYERS.O}
-            symbol="0"
+            symbol="O"
             isActive={activePlayer === "O"}
             onChangeName={handlePlayerNameChange}
           />
