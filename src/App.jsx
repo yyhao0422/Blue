@@ -1,31 +1,19 @@
-import { useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   ClerkProvider,
   SignedIn,
   SignedOut,
-  UserButton,
   RedirectToSignIn,
 } from "@clerk/clerk-react";
 
-import Sidebar, { SidebarItem } from "./components/Sidebar";
 import Home from "./pages/Home/Home";
-import Video from "./pages/Video/Video";
+import RootLayout from "./Root";
+import AiChat from "./pages/AiChat/AiChat";
+import AutismTest from "./pages/AutismTest/AutismTest";
 import FlashCard from "./pages/FlashCard/FlashCard";
 import MiniGame from "./pages/Mini Game/MiniGame";
-import AutismTest from "./pages/AutismTest/AutismTest";
-import AiChat from "./pages/AiChat/AiChat";
 import Settings from "./pages/Settings/Settings";
-
-import {
-  homeIcon,
-  cardIcon,
-  gameIcon,
-  chatIcon,
-  settingIcon,
-  testIcon,
-  videoIcon,
-} from "./components/icon";
-
+import Video from "./pages/Video/Video";
 // Clerk Auth Key
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
@@ -34,90 +22,27 @@ if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
 
 const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/aichat", element: <AiChat /> },
+      { path: "/autismtest", element: <AutismTest /> },
+      { path: "/flashcard", element: <FlashCard /> },
+      { path: "/minigame", element: <MiniGame /> },
+      { path: "/settings", element: <Settings /> },
+      { path: "/video", element: <Video /> },
+    ],
+  },
+]);
+
 function App() {
-  const [activepage, setActivePage] = useState("Home");
-
-  function handleSelectPage(page) {
-    setActivePage(page);
-  }
-
-  let currentPage;
-
-  switch (activepage) {
-    case "Home":
-      currentPage = <Home />;
-      break;
-    case "Video":
-      currentPage = <Video />;
-      break;
-    case "Settings":
-      currentPage = <Settings />;
-      break;
-    case "Flash Card":
-      currentPage = <FlashCard />;
-      break;
-    case "Mini Games":
-      currentPage = <MiniGame />;
-      break;
-    case "Autism Test":
-      currentPage = <AutismTest />;
-      break;
-    case "AI Chat":
-      currentPage = <AiChat />;
-      break;
-    default:
-      currentPage = <Home />;
-      break;
-  }
-
   return (
     <ClerkProvider publishableKey={clerkPubKey}>
       <SignedIn>
-        <main className="flex">
-          <Sidebar>
-            <SidebarItem
-              icon={homeIcon}
-              text="Home"
-              onCLick={Home}
-              onSelectPage={handleSelectPage}
-            />
-            <SidebarItem
-              icon={videoIcon}
-              text="Video"
-              onSelectPage={handleSelectPage}
-            />
-            <SidebarItem
-              icon={cardIcon}
-              text="Flash Card"
-              onSelectPage={handleSelectPage}
-            />
-            <SidebarItem
-              icon={gameIcon}
-              text="Mini Games"
-              onSelectPage={handleSelectPage}
-            />
-            <SidebarItem
-              icon={testIcon}
-              text="Autism Test"
-              onSelectPage={handleSelectPage}
-              alert
-            />
-            <SidebarItem
-              icon={chatIcon}
-              text="AI Chat"
-              onSelectPage={handleSelectPage}
-              alert
-            />
-            <hr className="my-3" />
-            <SidebarItem
-              icon={settingIcon}
-              text="Settings"
-              onSelectPage={handleSelectPage}
-            />
-          </Sidebar>
-          {/* Render different Page Based On Click   */}
-          {currentPage}
-        </main>
+        <RouterProvider router={router} />
       </SignedIn>
 
       <SignedOut>

@@ -1,8 +1,10 @@
+import { useContext, useState, createContext } from "react";
+import { Link } from "react-router-dom";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
+
 import blueLogo from "../images/logo-blue.png";
 import userLogo from "../images/user-logo.jpg";
-import { useContext, useState, createContext } from "react";
-import { UserButton, useUser } from "@clerk/clerk-react";
 
 const SidebarContext = createContext();
 
@@ -67,40 +69,38 @@ export default function Sidebar({ children }) {
 }
 
 // Sidebar Item will become children inside the component
-export function SidebarItem({ icon, text, active, alert, onSelectPage }) {
+export function SidebarItem({ icon, text, active, alert }) {
   const { isExpended } = useContext(SidebarContext);
-  function handleClickPage(page) {
-    onSelectPage(page);
-  }
-  return (
-    <li
-      onClick={() => handleClickPage(text)}
-      className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600"
-    >
-      {icon}
-      <span
-        className={`overflow-hidden transition-all ${
-          isExpended ? "w-52 ml-3" : "w-0"
-        }`}
-      >
-        {text}
-      </span>
-      {alert && (
-        <div
-          className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
-            isExpended ? "" : "top-2"
-          }`}
-        ></div>
-      )}
+  const linkText = text.toLowerCase().replaceAll(" ", "");
 
-      {/* Hover Effect */}
-      {!isExpended && (
-        <div
-          className={`absolute whitespace-nowrap left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+  return (
+    <Link to={linkText === "home" ? "/" : linkText}>
+      <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600">
+        {icon}
+        <span
+          className={`overflow-hidden transition-all ${
+            isExpended ? "w-52 ml-3" : "w-0"
+          }`}
         >
           {text}
-        </div>
-      )}
-    </li>
+        </span>
+        {alert && (
+          <div
+            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
+              isExpended ? "" : "top-2"
+            }`}
+          ></div>
+        )}
+
+        {/* Hover Effect */}
+        {!isExpended && (
+          <div
+            className={`absolute whitespace-nowrap left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+          >
+            {text}
+          </div>
+        )}
+      </li>
+    </Link>
   );
 }
