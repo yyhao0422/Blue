@@ -1,8 +1,8 @@
 import Card from "../../components/Card";
-import animal from "./cardImages/animal.jpg";
-import bodyPart from "./cardImages/body-parts.webp";
-import dailyRoutine from "./cardImages/daily-routine.jpg";
-import time from "./cardImages/time.webp";
+import animal from "./cardsrc/animal.jpg";
+import bodyPart from "./cardsrc/body-parts.webp";
+import dailyRoutine from "./cardsrc/daily-routine.jpg";
+import time from "./cardsrc/time.webp";
 
 export default function FlashCard() {
   return (
