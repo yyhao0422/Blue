@@ -11,7 +11,7 @@ import {
   videoIcon,
 } from "./components/icon";
 
-export default function RootLayout() {
+export default function RootLayout({ children }) {
   return (
     <main className="flex">
       <Sidebar>
@@ -25,6 +25,7 @@ export default function RootLayout() {
         <SidebarItem icon={settingIcon} text="Settings" />
       </Sidebar>
       <Outlet />
+      {children}
     </main>
   );
 }

@@ -10,14 +10,13 @@ import MiniGame from "./pages/Mini Game/MiniGame";
 import TicTacToe from "./pages/Mini Game/TicTacToe/TicTacToe";
 import Settings from "./pages/Settings/Settings";
 import Video from "./pages/Video/Video";
-import BodyPart from "./pages/FlashCard/flashCards/BodyPart";
-import DailyRoutine from "./pages/FlashCard/flashCards/DailyRoutine";
-import TellingTime from "./pages/FlashCard/flashCards/TellingTime";
+import ErrorPage from "./pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <Home /> },
       { path: "/aichat", element: <AiChat /> },
@@ -30,9 +29,6 @@ export const router = createBrowserRouter([
       { path: "/settings", element: <Settings /> },
       { path: "/video", element: <Video /> },
       { path: "/flashcard/animal", element: <AnimalCard /> },
-      { path: "/flashcard/bodypart", element: <BodyPart /> },
-      { path: "/flashcard/dailyroutine", element: <DailyRoutine /> },
-      { path: "/flashcard/time", element: <TellingTime /> },
       { path: "/minigame/tictactoe", element: <TicTacToe /> },
     ],
   },
