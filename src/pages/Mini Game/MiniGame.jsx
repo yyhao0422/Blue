@@ -8,8 +8,9 @@ export default function MiniGame() {
       <div className="flex w-fit">
         <Card
           title="Tic Tac toe"
-          pathToImage={TicTacToe}
+          image={TicTacToe}
           link="/minigame/tictactoe"
+          alt="TicTacToe"
         />
         <Card title="Constructing" pathToImage="" link="/flashcard/t" />
       </div>

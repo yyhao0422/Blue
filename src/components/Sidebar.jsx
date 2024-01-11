@@ -1,5 +1,5 @@
 import { useContext, useState, createContext } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { UserButton, useUser } from "@clerk/clerk-react";
 
@@ -75,7 +75,11 @@ export function SidebarItem({ icon, text, active, alert }) {
   const linkText = text.toLowerCase().replaceAll(" ", "");
 
   return (
-    <Link to={linkText === "home" ? "/" : linkText}>
+    <NavLink
+      to={linkText === "home" ? "/" : linkText}
+      className={({ isActive }) => (isActive ? "activeNavLink" : undefined)}
+      end
+    >
       <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600">
         {icon}
         <span
@@ -102,6 +106,6 @@ export function SidebarItem({ icon, text, active, alert }) {
           </div>
         )}
       </li>
-    </Link>
+    </NavLink>
   );
 }
