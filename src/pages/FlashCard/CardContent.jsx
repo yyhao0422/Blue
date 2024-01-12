@@ -28,7 +28,7 @@ export default function CardContent() {
 
   return (
     <>
-      <div className="flex position relative top-10 left-[750px]">
+      <div className="flex position relative top-10 h-10 left-[750px]">
         {flashCardId !== "0" && (
           <Link
             to={`/flashcard/${+flashCardId - 1}/0`}
@@ -37,7 +37,7 @@ export default function CardContent() {
             Left
           </Link>
         )}
-        <h1 className="font-bold text-3xl">
+        <h1 className="font-bold text-3xl ">
           {FLASHCARDDUMMY[flashCardId].title}
         </h1>
         {+flashCardId < FLASHCARDDUMMY.length - 1 && (
@@ -133,6 +133,9 @@ export default function CardContent() {
             </Link>
           )}
         </div>
+      </div>
+      <div className="postition absolute right-0 bottom-0 m-5 text-xl ">
+        <Link to="/flashcard">Menu</Link>
       </div>
     </>
   );
