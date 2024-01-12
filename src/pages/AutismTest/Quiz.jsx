@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { AUTISMTESTDUMMY } from "./AUTISMTESTDUMMY";
 
@@ -46,46 +46,54 @@ function Quiz() {
     );
   }
   return (
-    <div className="bg-cyan-500  max-w-[1000px] m-auto p-[2rem] rounded-xl ">
-      <h1 className="text-3xl">
-        <span className="mr-3">Question:</span>
-        {activeQuestion.text}
-      </h1>
-      <div className="flex flex-col mt-5">
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            handleAnswer(activeQuestionIndex, "definiteAgree");
-          }}
-        >
-          Definitely Agree
-        </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            handleAnswer(activeQuestionIndex, "slightlyAgree");
-          }}
-        >
-          Slightly Agree
-        </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            handleAnswer(activeQuestionIndex, "slightlyDisagree");
-          }}
-        >
-          Slightly Disagree
-        </div>
-        <div
-          className="cursor-pointer"
-          onClick={() => {
-            handleAnswer(activeQuestionIndex, "definitelyDisagree");
-          }}
-        >
-          Definitely Disagree
+    <>
+      <div className="bg-cyan-500  max-w-[1000px] m-auto p-[2rem] rounded-xl ">
+        <h1 className="text-3xl">
+          <span className="mr-3">{`Question ${
+            activeQuestionIndex + 1
+          } :`}</span>
+          {activeQuestion.text}
+        </h1>
+        <div className="flex flex-col mt-5">
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              handleAnswer(activeQuestionIndex, "definiteAgree");
+            }}
+          >
+            Definitely Agree
+          </div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              handleAnswer(activeQuestionIndex, "slightlyAgree");
+            }}
+          >
+            Slightly Agree
+          </div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              handleAnswer(activeQuestionIndex, "slightlyDisagree");
+            }}
+          >
+            Slightly Disagree
+          </div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              handleAnswer(activeQuestionIndex, "definitelyDisagree");
+            }}
+          >
+            Definitely Disagree
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="position absolute bottom-0 right-0 p-3 m-5 bg-blue-300 hover:bg-blue-500 rounded-lg">
+        <Link to="/autismtest">Exit Test</Link>
+      </div>
+    </>
   );
 }
 
