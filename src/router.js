@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
       { path: "/minigame", element: <MiniGame /> },
       { path: "/settings", element: <Settings /> },
       { path: "/video", element: <Video /> },
-      { path: "/flashcard/:flashCardId/:content", element: <CardContent /> },
+      { path: "/flashcard/:flashCardId/:contentId", element: <CardContent /> },
       { path: "/minigame/tictactoe", element: <TicTacToe /> },
     ],
   },
