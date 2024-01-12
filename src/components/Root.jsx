@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-import Sidebar, { SidebarItem } from "./components/Sidebar";
+import Sidebar, { SidebarItem } from "./Sidebar";
 import {
   homeIcon,
   cardIcon,
@@ -9,7 +9,7 @@ import {
   settingIcon,
   testIcon,
   videoIcon,
-} from "./components/icon";
+} from "./icon";
 
 export default function RootLayout({ children }) {
   return (

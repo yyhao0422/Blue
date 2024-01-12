@@ -70,13 +70,15 @@ export default function Sidebar({ children }) {
 }
 
 // Sidebar Item will become children inside the component
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert, isAdmin }) {
   const { isExpended } = useContext(SidebarContext);
   const linkText = text.toLowerCase().replaceAll(" ", "");
 
   return (
     <NavLink
-      to={linkText === "home" ? "/" : linkText}
+      to={
+        linkText === "home" ? `${isAdmin === true ? "/admin" : ""}/` : linkText
+      }
       className={({ isActive }) => (isActive ? "activeNavLink" : undefined)}
       end
     >

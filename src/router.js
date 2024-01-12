@@ -1,7 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
-import RootLayout from "./Root";
+import AdminHome from "./admin/pages/Home";
+import AdminFlashCard from "./admin/pages/FlashCard";
+import AdminAutismTest from "./admin/pages/AutismTest";
+import AdminVideo from "./admin/pages/Video";
+import RootLayout from "./components/Root";
 import AiChat from "./pages/AiChat/AiChat";
 import AutismTest from "./pages/AutismTest/AutismTest";
 import Quiz from "./pages/AutismTest/Quiz";
@@ -12,12 +16,14 @@ import TicTacToe from "./pages/Mini Game/TicTacToe/TicTacToe";
 import Settings from "./pages/Settings/Settings";
 import Video from "./pages/Video/Video";
 import ErrorPage from "./pages/ErrorPage";
+import Admin from "./admin/Admin";
+import AdminLayout from "./components/AdminLayout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorPage isAdmin={true} />,
     children: [
       { index: true, element: <Home /> },
       { path: "/aichat", element: <AiChat /> },
@@ -32,6 +38,17 @@ export const router = createBrowserRouter([
       { path: "/video", element: <Video /> },
       { path: "/flashcard/:flashCardId/:contentId", element: <CardContent /> },
       { path: "/minigame/tictactoe", element: <TicTacToe /> },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <AdminHome /> },
+      { path: "flashcard", element: <AdminFlashCard /> },
+      { path: "autismtest", element: <AdminAutismTest /> },
+      { path: "video", element: <AdminVideo /> },
     ],
   },
 ]);
