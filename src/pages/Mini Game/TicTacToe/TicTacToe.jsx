@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./TicTacToe.css";
 
 import Player from "./TicTacToeComponent/Player";
@@ -125,6 +126,9 @@ function TicTacToe() {
         />
       </div>
       <Log turns={gameTurns} />
+      <div className="position absolute bottom-0 right-0 m-5 bg-blue-300 rounded-xl p-3">
+        <Link to="/minigame">Game Menu</Link>
+      </div>
     </main>
   );
 }
