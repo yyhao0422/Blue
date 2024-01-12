@@ -16,14 +16,14 @@ import TicTacToe from "./pages/Mini Game/TicTacToe/TicTacToe";
 import Settings from "./pages/Settings/Settings";
 import Video from "./pages/Video/Video";
 import ErrorPage from "./pages/ErrorPage";
-import Admin from "./admin/Admin";
+
 import AdminLayout from "./components/AdminLayout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <ErrorPage isAdmin={true} />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
       { path: "/aichat", element: <AiChat /> },

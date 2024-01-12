@@ -2,11 +2,17 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { AUTISMTESTDUMMY } from "./AUTISMTESTDUMMY";
+import ErrorMessage from "../../components/ErrorMessage";
 
 function Quiz() {
   const { testId } = useParams();
+
   const [userScore, setUserScore] = useState(0);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+
+  if (AUTISMTESTDUMMY[testId] === undefined) {
+    return <ErrorMessage errorMessage="URL path parameter is not found !" />;
+  }
 
   const activeQuestion = AUTISMTESTDUMMY[testId].question[activeQuestionIndex];
 

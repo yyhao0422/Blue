@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
 import { FLASHCARDDUMMY } from "./FLASHCARDDUMMY";
+import ErrorMessage from "../../components/ErrorMessage";
 
 export default function CardContent() {
   const { flashCardId } = useParams();
@@ -11,9 +12,20 @@ export default function CardContent() {
   const [soundFile, setSoundFile] = useState(null);
 
   useEffect(() => {
-    const file = require(`./soundSrc/${FLASHCARDDUMMY[flashCardId].content[contentId].pathToSound}`);
-    setSoundFile(file);
-  }, [contentId]);
+    if (
+      FLASHCARDDUMMY[flashCardId] !== undefined &&
+      FLASHCARDDUMMY[flashCardId].content[contentId] !== undefined
+    ) {
+      const file = require(`./soundSrc/${FLASHCARDDUMMY[flashCardId].content[contentId].pathToSound}`);
+      setSoundFile(file);
+    }
+  }, [flashCardId, contentId]);
+
+  if (FLASHCARDDUMMY[flashCardId] === undefined) {
+    return <ErrorMessage errorMessage="Flash Card ID is not valid" />;
+  } else if (FLASHCARDDUMMY[flashCardId].content[contentId] === undefined) {
+    return <ErrorMessage errorMessage="Content ID is not valid" />;
+  }
 
   function handleRotate() {
     setIsRotate((prev) => !prev);
@@ -81,6 +93,7 @@ export default function CardContent() {
                   src={
                     FLASHCARDDUMMY[flashCardId].content[contentId].pathToImage
                   }
+                  alt={FLASHCARDDUMMY[flashCardId].content[contentId].answer}
                 />
               ) : (
                 <div className="w-96 h-[200px] bg-yellow-500">
