@@ -13,7 +13,6 @@ export default function Sidebar({ children }) {
 
   const { isSignedIn, user, isLoaded } = useUser();
 
-  console.log(user);
   return (
     <aside
       className={`h-screen sticky top-0 ${

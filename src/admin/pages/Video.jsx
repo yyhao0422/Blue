@@ -1,5 +1,9 @@
 function Video() {
-  return <div>Video</div>;
+  return (
+    <>
+      <div>Video Maintainance</div>
+    </>
+  );
 }
 
 export default Video;
