@@ -56,7 +56,7 @@ export default function CardContent() {
       const file = require(`./soundSrc/${currentFlashCardCategory.question[activeFlashCardIndex].soundUrl}`);
       setSoundFile(file);
     }
-  }, [currentFlashCardCategory, activeFlashCardIndex]);
+  }, [currentFlashCardCategory, activeFlashCardIndex, flashCardContent]);
 
   if (flashCardContent === undefined) {
     return <ErrorMessage errorMessage="Flash Card ID is not valid" />;
@@ -105,6 +105,10 @@ export default function CardContent() {
   if (error !== "") {
     console.log(error);
     return <ErrorMessage errorMessage={error.message} />;
+  }
+
+  if (isLoading) {
+    return <p>Fetching Flash Card Content</p>;
   }
 
   console.log(soundFile);

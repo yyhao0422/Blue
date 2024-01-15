@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import { useSession, useUser } from "@clerk/clerk-react";
+import { useSession } from "@clerk/clerk-react";
 import Card from "../../components/Card";
-import { FLASHCARDDUMMY } from "./FLASHCARDDUMMY";
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
 

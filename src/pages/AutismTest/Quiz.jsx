@@ -1,20 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { AUTISMTESTDUMMY } from "./AUTISMTESTDUMMY";
 import ErrorMessage from "../../components/ErrorMessage";
+import { ClerkContext } from "../../store/clerk-user-context";
 
 function Quiz() {
   const { testId } = useParams();
-
+  const ClerkCtx = useContext(ClerkContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [autismTestContent, setAutismTestContent] = useState({});
+  const [targetTestContent, setTargetTestContent] = useState([]);
+  const [error, setError] = useState("");
   const [userScore, setUserScore] = useState(0);
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
 
-  if (AUTISMTESTDUMMY[testId] === undefined) {
-    return <ErrorMessage errorMessage="URL path parameter is not found !" />;
-  }
+  const clerkId = ClerkCtx.id;
 
-  const activeQuestion = AUTISMTESTDUMMY[testId].question[activeQuestionIndex];
+  useEffect(() => {
+    async function fetchAutismTestContent() {
+      setIsLoading(true);
+      const headers = {
+        "Content-Type": "application/json",
+        ClerkId: clerkId,
+      };
+      try {
+        const response = await fetch(
+          "https://api.alexsama.tech/api/autism-test-question",
+          { headers }
+        );
+        const resData = await response.json();
+        if (!response.ok) {
+          throw new Error("Failed to fetch Flash Card Information");
+        }
+        setAutismTestContent(resData.data);
+      } catch (error) {
+        setError({
+          message: error.message || "Failed to fetch Flash Crad Information",
+        });
+      }
+
+      setIsLoading(false);
+    }
+
+    fetchAutismTestContent();
+  }, []);
+  console.log(autismTestContent);
+
+  // Extract Autism Test Content to current Test ID and put it in target test content array
+  useEffect(() => {
+    if (
+      Object.keys(autismTestContent).length !== 0 &&
+      Object.keys(targetTestContent).length === 0
+    ) {
+      let isFoundedAll = false;
+      for (let i = 0; i < autismTestContent.length; i++) {
+        if (!isFoundedAll) {
+          console.log(autismTestContent[i]);
+
+          if (+autismTestContent[i].autismTestCategoryId === +testId) {
+            setTargetTestContent((prev) => [...prev, autismTestContent[i]]);
+          } else if (autismTestContent[i].autismTestCategoryId > testId) {
+            isFoundedAll = true;
+          }
+        }
+      }
+    }
+  }, [autismTestContent]);
+  console.log(targetTestContent);
+
+  const activeQuestion = targetTestContent[activeQuestionIndex];
 
   function handleAnswer(activeQuestionIndex, answer) {
     if (
@@ -31,7 +86,10 @@ function Quiz() {
     setActiveQuestionIndex((prev) => prev + 1);
   }
 
-  if (activeQuestionIndex >= AUTISMTESTDUMMY[testId].question.length) {
+  if (
+    Object.keys(targetTestContent).length !== 0 &&
+    activeQuestionIndex >= targetTestContent?.length
+  ) {
     return (
       <div>
         {`Your score is ${userScore}`}
@@ -51,50 +109,54 @@ function Quiz() {
       </div>
     );
   }
+
   return (
     <>
-      <div className="bg-cyan-500  max-w-[1000px] m-auto p-[2rem] rounded-xl ">
-        <h1 className="text-3xl">
-          <span className="mr-3">{`Question ${
-            activeQuestionIndex + 1
-          } :`}</span>
-          {activeQuestion.text}
-        </h1>
-        <div className="flex flex-col mt-5">
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              handleAnswer(activeQuestionIndex, "definiteAgree");
-            }}
-          >
-            Definitely Agree
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              handleAnswer(activeQuestionIndex, "slightlyAgree");
-            }}
-          >
-            Slightly Agree
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              handleAnswer(activeQuestionIndex, "slightlyDisagree");
-            }}
-          >
-            Slightly Disagree
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => {
-              handleAnswer(activeQuestionIndex, "definitelyDisagree");
-            }}
-          >
-            Definitely Disagree
+      {isLoading && <p>Fetching Autism test Data</p>}
+      {Object.keys(targetTestContent).length !== 0 && (
+        <div className="bg-cyan-500  max-w-[1000px] m-auto p-[2rem] rounded-xl ">
+          <h1 className="text-3xl">
+            <span className="mr-3">{`Question ${
+              activeQuestionIndex + 1
+            } :`}</span>
+            {activeQuestion.question}
+          </h1>
+          <div className="flex flex-col mt-5">
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                handleAnswer(activeQuestionIndex, "definiteAgree");
+              }}
+            >
+              Definitely Agree
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                handleAnswer(activeQuestionIndex, "slightlyAgree");
+              }}
+            >
+              Slightly Agree
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                handleAnswer(activeQuestionIndex, "slightlyDisagree");
+              }}
+            >
+              Slightly Disagree
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                handleAnswer(activeQuestionIndex, "definitelyDisagree");
+              }}
+            >
+              Definitely Disagree
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="position absolute bottom-0 right-0 p-3 m-5 bg-blue-300 hover:bg-blue-500 rounded-lg">
         <Link to="/autismtest">Exit Test</Link>
