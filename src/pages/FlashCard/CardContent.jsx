@@ -5,7 +5,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
 
 export default function CardContent() {
-  const clerkCtx = useContext(ClerkContext);
+  const clerkCtx = useContext(ClerkContext).user;
   const { flashCardId } = useParams();
   const [flashCardContent, setFlashCardContent] = useState({});
   const [error, setError] = useState("");

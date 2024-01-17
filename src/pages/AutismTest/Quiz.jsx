@@ -7,7 +7,7 @@ import { ClerkContext } from "../../store/clerk-user-context";
 
 function Quiz() {
   const { testId } = useParams();
-  const ClerkCtx = useContext(ClerkContext);
+  const ClerkCtx = useContext(ClerkContext).user;
   const [isLoading, setIsLoading] = useState(false);
   const [autismTestContent, setAutismTestContent] = useState({});
   const [targetTestContent, setTargetTestContent] = useState([]);
@@ -45,6 +45,7 @@ function Quiz() {
 
     fetchAutismTestContent();
   }, []);
+
   console.log(autismTestContent);
 
   // Extract Autism Test Content to current Test ID and put it in target test content array
@@ -67,6 +68,17 @@ function Quiz() {
       }
     }
   }, [autismTestContent]);
+
+  useEffect(() => {
+    if (
+      Object.keys(autismTestContent) !== 0 &&
+      Object.keys(targetTestContent) === 0
+    ) {
+      setError({
+        message: error.message || "Failed to fetch Autism Test Content",
+      });
+    }
+  }, [autismTestContent]);
   console.log(targetTestContent);
 
   const activeQuestion = targetTestContent[activeQuestionIndex];
@@ -85,6 +97,10 @@ function Quiz() {
     }
     setActiveQuestionIndex((prev) => prev + 1);
   }
+
+  // if (error !== null) {
+  //   return <ErrorMessage errorMessage="Fail to fetch Autism Test Data" />;
+  // }
 
   if (
     Object.keys(targetTestContent).length !== 0 &&

@@ -1,4 +1,4 @@
-import RootLayout from "../components/Root";
+import RootLayout from "../RootLayout";
 import ErrorMessage from "../components/ErrorMessage";
 
 function ErrorPage() {

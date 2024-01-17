@@ -5,7 +5,7 @@ import AdminHome from "./admin/pages/Home";
 import AdminFlashCard from "./admin/pages/FlashCard";
 import AdminAutismTest from "./admin/pages/AutismTest";
 import AdminVideo from "./admin/pages/Video";
-import RootLayout from "./components/Root";
+import RootLayout from "./RootLayout";
 import AiChat from "./pages/AiChat/AiChat";
 import AutismTest from "./pages/AutismTest/AutismTest";
 import Quiz from "./pages/AutismTest/Quiz";
@@ -43,7 +43,6 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     element: <AdminLayout />,
-    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <AdminHome /> },
       { path: "flashcard", element: <AdminFlashCard /> },

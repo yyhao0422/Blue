@@ -9,7 +9,7 @@ export default function FlashCard() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { isLoaded, isSignedIn } = useSession();
-  const clerkCtx = useContext(ClerkContext);
+  const clerkCtx = useContext(ClerkContext).user;
   const clerkId = clerkCtx.id;
 
   useEffect(() => {

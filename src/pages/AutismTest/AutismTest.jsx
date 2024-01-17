@@ -7,13 +7,14 @@ import Card from "../../components/Card";
 import { ClerkContext } from "../../store/clerk-user-context.jsx";
 
 export default function AutismTest() {
-  const ClerkCtx = useContext(ClerkContext);
+  const ClerkCtx = useContext(ClerkContext).user;
   const [isLoading, setIsLoading] = useState(false);
   const [autismTestData, setAutismTestData] = useState({});
   const [error, setError] = useState("");
   const { isSignedIn } = useSession();
 
   const clerkId = ClerkCtx.id;
+
   useEffect(() => {
     async function fetchAutismTestData() {
       setIsLoading(true);

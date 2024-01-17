@@ -86,7 +86,9 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
   return (
     <NavLink
       to={
-        linkText === "home" ? `${isAdmin === true ? "/admin" : ""}/` : linkText
+        linkText === "home" || linkText === "backtouser"
+          ? `${isAdmin === true ? "/admin" : ""}/`
+          : linkText
       }
       className={({ isActive }) => (isActive ? "activeNavLink" : undefined)}
       end
