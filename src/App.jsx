@@ -17,12 +17,7 @@ const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY;
 function App() {
   return (
     <ClerkProvider publishableKey={clerkPubKey}>
-      <SignedIn>
-        <RouterProvider router={router} />
-      </SignedIn>
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
+      <RouterProvider router={router} />
     </ClerkProvider>
   );
 }

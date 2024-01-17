@@ -1,7 +1,7 @@
 import { useContext, useState, createContext } from "react";
 import { NavLink } from "react-router-dom";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
-import { UserButton, useUser } from "@clerk/clerk-react";
+import { UserButton, useUser, SignInButton } from "@clerk/clerk-react";
 
 import blueLogo from "../images/logo-blue.png";
 import userLogo from "../images/user-logo.jpg";
@@ -13,7 +13,6 @@ export default function Sidebar({ children }) {
 
   const { isSignedIn, user, isLoaded } = useUser();
 
-  console.log(user);
   return (
     <aside
       className={`h-screen sticky top-0 ${
@@ -46,23 +45,33 @@ export default function Sidebar({ children }) {
 
         {/* This is the bottom client info */}
         <div className={`border-t flex justify-center p-3`}>
-          <div className="w-10 h-10 flex items-center justify-center">
-            <UserButton />
-          </div>
-
-          <div
-            className={`flex justify-between items-center overflow-hidden transition-all ${
-              isExpended ? "w-52 ml-3" : "w-0"
-            }`}
-          >
-            <div className="leading-4">
-              <h4 className="font-semibold">{user.fullName}</h4>
-              <span className="text-xs text-gray-600">
-                {user.primaryEmailAddress.emailAddress}
-              </span>
+          {isSignedIn ? (
+            <div className="w-10 h-10 flex items-center justify-center">
+              <UserButton />
             </div>
-            <MoreVertical size={20} />
-          </div>
+          ) : (
+            <SignInButton>
+              <div className="rounded-xl bg-cyan-300 hover:bg-cyan-500 p-[10px] w-48 text-center cursor-pointer">
+                <button>Sign In</button>
+              </div>
+            </SignInButton>
+          )}
+
+          {isSignedIn && (
+            <div
+              className={`flex justify-between items-center overflow-hidden transition-all ${
+                isExpended ? "w-52 ml-3" : "w-0"
+              }`}
+            >
+              <div className="leading-4">
+                <h4 className="font-semibold">{user.fullName}</h4>
+                <span className="text-xs text-gray-600">
+                  {user.primaryEmailAddress.emailAddress}
+                </span>
+              </div>
+              <MoreVertical size={20} />
+            </div>
+          )}
         </div>
       </nav>
     </aside>
@@ -70,13 +79,17 @@ export default function Sidebar({ children }) {
 }
 
 // Sidebar Item will become children inside the component
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert, isAdmin }) {
   const { isExpended } = useContext(SidebarContext);
   const linkText = text.toLowerCase().replaceAll(" ", "");
 
   return (
     <NavLink
-      to={linkText === "home" ? "/" : linkText}
+      to={
+        linkText === "home" || linkText === "backtouser"
+          ? `${isAdmin === true ? "/admin" : ""}/`
+          : linkText
+      }
       className={({ isActive }) => (isActive ? "activeNavLink" : undefined)}
       end
     >
