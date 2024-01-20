@@ -1,13 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import Sidebar, { SidebarItem } from "./Sidebar";
+import Sidebar, { SidebarItem } from "./components/Sidebar";
+import { AdminClerkContext } from "./store/admin-clerk-user-context";
+
 import {
   __internal__setErrorThrowerOptions,
   useUser,
 } from "@clerk/clerk-react";
-import { homeIcon, cardIcon, testIcon, videoIcon, backIcon } from "./icon";
-import ErrorMessage from "./ErrorMessage";
+import {
+  homeIcon,
+  cardIcon,
+  testIcon,
+  videoIcon,
+  backIcon,
+} from "./components/icon";
+import ErrorMessage from "./components/ErrorMessage";
 
 export default function AdminLayout({ children }) {
   const { isSignedIn, user, isLoaded } = useUser();
@@ -50,31 +58,35 @@ export default function AdminLayout({ children }) {
     fetchIsAdmin();
   }, [user]);
 
-  console.log(isAdmin);
-
   return (
     <>
       {isLoading && <p>Authenticating your credential...</p>}
       {error !== "" && <ErrorMessage errorMessage={error.message} />}
-      {isAdmin && (
-        <main className="flex">
-          <Sidebar>
-            <SidebarItem icon={homeIcon} text="Home" isAdmin={true} />
-            <SidebarItem icon={videoIcon} text="Video" isAdmin={true} />
-            <SidebarItem icon={cardIcon} text="Flash Card" isAdmin={true} />
-            <SidebarItem
-              icon={testIcon}
-              text="Autism Test"
-              isAdmin={true}
-              alert
-            />
-            <br />
-            <hr />
-            <SidebarItem icon={backIcon} text="Back To User" isAdmin={false} />
-          </Sidebar>
-          <Outlet />
-          {children}
-        </main>
+      {isAdmin && isLoaded && (
+        <AdminClerkContext.Provider value={{ user: user, isAdmin: isAdmin }}>
+          <main className="flex">
+            <Sidebar>
+              <SidebarItem icon={homeIcon} text="Home" isAdmin={true} />
+              <SidebarItem icon={videoIcon} text="Video" isAdmin={true} />
+              <SidebarItem icon={cardIcon} text="Flash Card" isAdmin={true} />
+              <SidebarItem
+                icon={testIcon}
+                text="Autism Test"
+                isAdmin={true}
+                alert
+              />
+              <br />
+              <hr />
+              <SidebarItem
+                icon={backIcon}
+                text="Back To User"
+                isAdmin={false}
+              />
+            </Sidebar>
+            <Outlet />
+            {children}
+          </main>
+        </AdminClerkContext.Provider>
       )}
       {!isAdmin && !isLoading && (
         <ErrorMessage errorMessage="You dont have admin permission. Access deny!" />
