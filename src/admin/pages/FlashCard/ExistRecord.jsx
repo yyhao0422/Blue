@@ -30,9 +30,7 @@ function ExistRecord({ recordData, AdminId }) {
       <td className="p-2">{recordData.id}</td>
       <td className="p-2">{recordData.title}</td>
       <td className="p-2">
-        <button onClick={() => handleViewButton(`${recordData.imageUrl}`)}>
-          View Image
-        </button>
+        <img src={recordData.imageUrl} className="w-10" />
       </td>
       <td className="p-2">{recordData.description}</td>
       <td className="p-2">
