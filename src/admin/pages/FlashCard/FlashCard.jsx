@@ -42,6 +42,11 @@ function FlashCard() {
     fetchFlashCardData();
   }, [AdminId, refresh]);
 
+  // Refresh Flash Card
+  function refreshFlashCard() {
+    setRefresh((prev) => !prev);
+  }
+
   // New Button
   function handleNewFlashCard() {
     newFlashCardDialog.current.showModal();
@@ -116,7 +121,7 @@ function FlashCard() {
       }
       if (resData.message === "success") {
         setNewFlashCardResult("Form submitted successfully ! ");
-        setRefresh((prev) => !prev);
+        refreshFlashCard();
       }
     } catch (error) {
       setNewFlashCardResult("Failed to submit form. Please try again !");
@@ -158,6 +163,9 @@ function FlashCard() {
                     key={recordData.id}
                     recordData={recordData}
                     AdminId={AdminId}
+                    refreshFlashCard={() => {
+                      setRefresh((prev) => !prev);
+                    }}
                   />
                 );
               })}

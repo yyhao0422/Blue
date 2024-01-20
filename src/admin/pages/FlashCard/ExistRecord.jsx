@@ -1,14 +1,42 @@
 import { useRef, useState } from "react";
-function ExistRecord({ recordData, AdminId }) {
+function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
   const editFlashCardDialog = useRef();
 
   const [isEditingContent, setisEditingContent] = useState(false);
+  const [isDeleteLoading, setIsDeleletLoading] = useState(false);
+  const [error, setError] = useState("");
 
   //Handle View Button
-  function handleViewButton(url) {
-    window.open(url, "_blank").focus();
-  }
 
+  function handleSaveCardDetail() {}
+
+  async function handleDeleteFlashCard() {
+    setIsDeleletLoading(true);
+    try {
+      const response = await fetch(
+        `https://api.alexsama.tech/api/flash-card-category/${recordData.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            ClerkId: AdminId,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Fail to delete Flash Card !");
+      }
+
+      const resData = await response.json();
+    } catch (error) {
+      setError({
+        message: error.message || `Fail to delete Flash Card !`,
+      });
+    }
+    setIsDeleletLoading(false);
+    refreshFlashCard();
+  }
   //Handle Edit Button
   function handleEditFlashCard() {
     editFlashCardDialog.current.showModal();
@@ -18,11 +46,9 @@ function ExistRecord({ recordData, AdminId }) {
     editFlashCardDialog.current.close();
   }
 
-  function saveEditFlashCard(event) {
+  function handleEditCardDetail(event) {
     const fd = new FormData(event.target);
     const data = Object.fromEntries(fd.entries());
-    console.log(data);
-    console.log(data.soundFile.name);
   }
 
   return (
@@ -34,7 +60,15 @@ function ExistRecord({ recordData, AdminId }) {
       </td>
       <td className="p-2">{recordData.description}</td>
       <td className="p-2">
-        <button onClick={handleEditFlashCard}>Edit</button>
+        <button className="mx-2" onClick={handleEditFlashCard}>
+          Edit
+        </button>
+        {!isDeleteLoading && (
+          <button className="mx-2" onClick={handleDeleteFlashCard}>
+            Delete
+          </button>
+        )}
+        {isDeleteLoading && <p>Loading ...</p>}
       </td>
       {/* ----------------Edit Dialog ---------------- */}
       <dialog ref={editFlashCardDialog} className="p-3 rounded-lg">
@@ -57,7 +91,7 @@ function ExistRecord({ recordData, AdminId }) {
             Card Content
           </h1>
         </div>
-        <form method="dialog" onSubmit={saveEditFlashCard}>
+        <form method="dialog" onSubmit={handleEditCardDetail}>
           {/*----------------- Card Detail ------------------------ */}
           {!isEditingContent && (
             <div className="flex flex-col">
