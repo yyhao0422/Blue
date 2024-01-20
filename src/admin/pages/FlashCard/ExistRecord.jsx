@@ -6,10 +6,6 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
   const [isDeleteLoading, setIsDeleletLoading] = useState(false);
   const [error, setError] = useState("");
 
-  //Handle View Button
-
-  function handleSaveCardDetail() {}
-
   async function handleDeleteFlashCard() {
     setIsDeleletLoading(true);
     try {
