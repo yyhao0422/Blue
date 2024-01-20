@@ -4,6 +4,8 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
 
   const [isEditingContent, setisEditingContent] = useState(false);
   const [isDeleteLoading, setIsDeleletLoading] = useState(false);
+  const [isUpdateCardDetail, setIsUpdateCardDetail] = useState(false);
+  const [updateFlashCardResult, setUpdateFlashCardResult] = useState(null);
   const [error, setError] = useState("");
 
   async function handleDeleteFlashCard() {
@@ -42,9 +44,71 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
     editFlashCardDialog.current.close();
   }
 
-  function handleEditCardDetail(event) {
+  async function handleEditCardDetail(event) {
+    event.preventDefault();
     const fd = new FormData(event.target);
     const data = Object.fromEntries(fd.entries());
+    const uploadImageHeaders = new Headers();
+    uploadImageHeaders.append("ClerkId", AdminId);
+    uploadImageHeaders.append("Accept", "application/json");
+    // Image data
+    const imageFile = fd.get("upload"); // File that  get from form data
+    const bodyImage = new FormData(); // Create a new form data that needed to pass in to body
+    bodyImage.append("upload", imageFile);
+    bodyImage.append("dirname", "Images");
+    // Upload Image Request Option
+    const imageRequestOption = {
+      method: "POST",
+      headers: uploadImageHeaders,
+      body: bodyImage,
+    };
+
+    setIsUpdateCardDetail(true);
+    try {
+      const responseUploadNewImage = await fetch(
+        `https://api.alexsama.tech/api/upload-file`,
+        imageRequestOption
+      );
+
+      const resDataNewImage = await responseUploadNewImage.json();
+
+      if (!responseUploadNewImage) {
+        throw new Error("Failed to update FLash Card Images");
+      }
+
+      const response = await fetch(
+        ` https://api.alexsama.tech/api/flash-card-category/${recordData.id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            title: data.title,
+            description: data.description,
+            imageUrl: resDataNewImage.data,
+            flashCardQuestionIds: [],
+          }),
+          headers: {
+            "Content-type": "application/json",
+            ClerkId: AdminId,
+          },
+        }
+      );
+      const resData = await response.json();
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error("Failed to update Flash Card Information");
+      }
+      if (resData.message === "success") {
+        setUpdateFlashCardResult("Form submitted successfully ! ");
+        refreshFlashCard();
+      }
+    } catch (error) {
+      setError({
+        message: error.message || "Failed to fetch Flash Crad Information",
+      });
+    }
+
+    setIsUpdateCardDetail(false);
   }
 
   return (
@@ -89,41 +153,45 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
         </div>
         <form method="dialog" onSubmit={handleEditCardDetail}>
           {/*----------------- Card Detail ------------------------ */}
-          {!isEditingContent && (
-            <div className="flex flex-col">
-              <div className="flex justify-between items-center">
-                <label>Title :</label>
-                <input
-                  type="text"
-                  name="title"
-                  className="m-2 border"
-                  value={recordData.title}
-                  required
-                />
+          {updateFlashCardResult !== null && <p>{updateFlashCardResult}</p>}
+          {isUpdateCardDetail && <p>Loading ... </p>}
+          {!isEditingContent &&
+            updateFlashCardResult === null &&
+            !isUpdateCardDetail && (
+              <div className="flex flex-col">
+                <div className="flex justify-between items-center">
+                  <label>Title :</label>
+                  <input
+                    type="text"
+                    name="title"
+                    className="m-2 border"
+                    placeholder={recordData.title}
+                    required
+                  />
+                </div>
+                <div className="flex justify-between items-center">
+                  <label>Alt :</label>
+                  <input
+                    type="text"
+                    name="description"
+                    className="m-2 border"
+                    placeholder={recordData.description}
+                    required
+                  />
+                </div>
+                <div className="flex justify-between items-center">
+                  <label>Image URL :</label>
+                  <img className="w-10" src={recordData.imageUrl} />
+                  <input
+                    type="file"
+                    className="m-2 border"
+                    accept=".png, .jpg, .jpeg, .gif "
+                    required
+                    name="upload"
+                  />
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <label>Alt :</label>
-                <input
-                  type="text"
-                  name="alt"
-                  className="m-2 border"
-                  value={recordData.description}
-                  required
-                />
-              </div>
-              <div className="flex justify-between items-center">
-                <label>Image URL :</label>
-                <img className="w-10" src={recordData.imageUrl} />
-                <input
-                  type="file"
-                  className="m-2 border"
-                  accept=".png, .jpg, .jpeg, .gif "
-                  required
-                  name="imageUrl"
-                />
-              </div>
-            </div>
-          )}
+            )}
           {/*----------------- Card Content ------------------------ */}
 
           {isEditingContent && (
@@ -184,7 +252,9 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
             </div>
           )}
           <div className="flex justify-between m-3">
-            <button>Save</button>
+            {!isEditingContent &&
+              !isUpdateCardDetail &&
+              updateFlashCardResult === null && <button>Save</button>}
             <button type="button" onClick={closeEditFlashCard}>
               Close
             </button>
