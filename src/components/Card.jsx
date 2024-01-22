@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "./Card.scoped.css";
 
 export default function FlashCardComponent({
   title,
@@ -7,12 +6,11 @@ export default function FlashCardComponent({
   image,
   alt,
   state,
-  children,
 }) {
   return (
-    <Link to={link} state={state} className="card-item">
-      <img className="h-4/5" src={image} alt={alt} />
-      <span className="align-text-middle bg-red-500">{title}</span>
+    <Link to={link} state={state} className="card-item shadow-xl bg-cyan-300">
+      <img className="h-4/5 w-full" src={image} alt={alt} />
+      <span className="h-1/5 flex justify-center items-center text-xl">{title}</span>
     </Link>
   );
 }

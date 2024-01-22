@@ -3,11 +3,12 @@ import { useSession } from "@clerk/clerk-react";
 import Card from "../../components/Card";
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
+import loader from "../../images/loader.gif";
 
 export default function FlashCard() {
-  const [flashCardInfo, setFlashCardInfo] = useState({});
+  const [flashCardInfo, setFlashCardInfo] = useState([]);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { isLoaded, isSignedIn } = useSession();
   const clerkCtx = useContext(ClerkContext).user;
   const clerkId = clerkCtx?.id;
@@ -58,20 +59,25 @@ export default function FlashCard() {
   console.log(flashCardInfo);
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-          {
-            flashCardInfo.map((card) => {
-              return (
-                <Card
+    <Fragment>
+        {isLoading ? (
+            <div className="flex h-screen w-full justify-center items-center">
+                <img src={loader} alt="loading.gif" height="100" width="100"/>
+            </div>
+        ) : (
+          <div className="grid grid-cols-4 grid-rows-3 gap-4 p-3.5">
+          {flashCardInfo.map((card) => (
+              <Card
                   title={card.title}
                   link={`/flashcard/${card.id}`}
                   image={card.imageUrl}
                   alt={card.description}
                   key={card.id}
-                />
-              );
-            })
-          }
-    </div>
-  );
+              />
+          ))}
+      </div>
+        )}
+    </Fragment>
+);
+
 }

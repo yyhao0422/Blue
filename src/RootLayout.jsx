@@ -58,8 +58,7 @@ export default function RootLayout({ children }) {
           value={{
             user: user,
             isAdmin: isAdmin,
-          }}
-        >
+          }}>
           <main className="flex">
             <Sidebar>
               <SidebarItem icon={homeIcon} text="Home" />

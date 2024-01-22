@@ -1,6 +1,7 @@
 body {
   margin: 0;
-  font-family: "PoppinsMedium"
+  font-family: "PoppinsMedium";
+  height: 100vh;
 }
 
 @font-face {
