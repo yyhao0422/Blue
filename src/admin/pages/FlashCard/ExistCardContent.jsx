@@ -7,6 +7,7 @@ function ExistCardContent({ question, refreshFlashCard, AdminId }) {
   const newSoundSrc = useRef();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [error, setError] = useState(null);
 
   console.log(question);
@@ -97,7 +98,33 @@ function ExistCardContent({ question, refreshFlashCard, AdminId }) {
 
     setIsLoading(false);
   }
-  async function handleDeleteAction() {}
+  async function handleDeleteAction() {
+    setIsLoadingDelete(true);
+    try {
+      const response = await fetch(
+        `https://api.alexsama.tech/api/flash-card-question/${question.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            ClerkId: AdminId,
+            Accept: "application/json",
+          },
+        }
+      );
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Fail to delete selected card content !");
+      } else {
+        refreshFlashCard();
+      }
+    } catch (error) {
+      setError({
+        message: error.message || `Fail to add Flash Card Content !`,
+      });
+    }
+    setIsLoadingDelete(false);
+  }
 
   function handleEditOpenModal() {
     editDialog.current.showModal();
@@ -133,7 +160,7 @@ function ExistCardContent({ question, refreshFlashCard, AdminId }) {
           type="button"
           className="
       mx-2"
-          onClick={handleEditCloseModal}
+          onClick={handleDeleteAction}
         >
           Delete
         </button>
