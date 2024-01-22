@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, Fragment } from "react";
 import { useSession } from "@clerk/clerk-react";
 import Card from "../../components/Card";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -66,12 +66,8 @@ export default function FlashCard() {
   console.log(flashCardInfo);
 
   return (
-    <>
-      <div className="flex flex-col">
-        <h1 className="text-center font-bold text-5xl mt-5">Flash Card</h1>
-        {isLoading && <p>Fetching the data ...</p>}
-        <div className="flex flex-wrap w-fit">
-          {Object.keys(flashCardInfo).length !== 0 &&
+    <div className="grid grid-cols-4 gap-4">
+          {
             flashCardInfo.map((card) => {
               return (
                 <Card
@@ -82,9 +78,8 @@ export default function FlashCard() {
                   key={card.id}
                 />
               );
-            })}
-        </div>
-      </div>
-    </>
+            })
+          }
+    </div>
   );
 }

@@ -48,16 +48,6 @@ export default function CardContent() {
     fetchFlashCard();
   }, []);
 
-  useEffect(() => {
-    if (
-      Object.keys(flashCardContent).length !== 0 &&
-      currentFlashCardCategory !== null
-    ) {
-      const file = require(`./soundSrc/${currentFlashCardCategory.question[activeFlashCardIndex].soundUrl}`);
-      setSoundFile(file);
-    }
-  }, [currentFlashCardCategory, activeFlashCardIndex, flashCardContent]);
-
   if (flashCardContent === undefined) {
     return <ErrorMessage errorMessage="Flash Card ID is not valid" />;
   }

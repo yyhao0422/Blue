@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "./Card.scoped.css";
 
 export default function FlashCardComponent({
   title,
@@ -9,16 +10,9 @@ export default function FlashCardComponent({
   children,
 }) {
   return (
-    <Link
-      className="m-10 pt-5 hover:bg-cyan-500 h-80 rounded-md cursor-pointer"
-      to={link}
-      state={state}
-    >
-      <div className="flex justify-center items-center w-48 h-48 m-10">
-        <img className="max-h-48" src={image} alt={alt} />
-        {children}
-      </div>
-      <h2 className="text-center">{title}</h2>
+    <Link to={link} state={state} className="card-item">
+      <img className="h-4/5" src={image} alt={alt} />
+      <span className="align-text-middle bg-red-500">{title}</span>
     </Link>
   );
 }
