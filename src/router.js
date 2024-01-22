@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import Home from "./pages/Home/Home";
 import AdminHome from "./admin/pages/Home";
-import AdminFlashCard from "./admin/pages/FlashCard";
+import AdminFlashCard from "./admin/pages/FlashCard/FlashCard";
 import AdminAutismTest from "./admin/pages/AutismTest";
 import AdminVideo from "./admin/pages/Video";
 import RootLayout from "./RootLayout";
@@ -17,7 +17,7 @@ import Settings from "./pages/Settings/Settings";
 import Video from "./pages/Video/Video";
 import ErrorPage from "./pages/ErrorPage";
 
-import AdminLayout from "./components/AdminLayout";
+import AdminLayout from "./AdminLayout";
 
 export const router = createBrowserRouter([
   {

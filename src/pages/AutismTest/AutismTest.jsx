@@ -13,7 +13,7 @@ export default function AutismTest() {
   const [error, setError] = useState("");
   const { isSignedIn } = useSession();
 
-  const clerkId = ClerkCtx.id;
+  const clerkId = ClerkCtx?.id;
 
   useEffect(() => {
     async function fetchAutismTestData() {
@@ -39,7 +39,9 @@ export default function AutismTest() {
       }
       setIsLoading(false);
     }
-    fetchAutismTestData();
+    if (isSignedIn) {
+      fetchAutismTestData();
+    }
   }, []);
 
   if (!isSignedIn) {
