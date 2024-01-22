@@ -10,7 +10,7 @@ export default function FlashCard() {
   const [isLoading, setIsLoading] = useState(false);
   const { isLoaded, isSignedIn } = useSession();
   const clerkCtx = useContext(ClerkContext).user;
-  const clerkId = clerkCtx.id;
+  const clerkId = clerkCtx?.id;
 
   useEffect(() => {
     async function fetchFlashCard() {
@@ -38,16 +38,8 @@ export default function FlashCard() {
       setIsLoading(false);
     }
 
-    fetchFlashCard();
+    if (isSignedIn) fetchFlashCard();
   }, []);
-
-  if (Object.keys(flashCardInfo).length !== 0) {
-    flashCardInfo.map((item) => {
-      console.log(item.id);
-    });
-  } else {
-    console.log(flashCardInfo);
-  }
 
   if (error !== "") {
     console.log(error);

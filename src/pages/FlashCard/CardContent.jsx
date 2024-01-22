@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import AudioPlayer from "react-h5-audio-player";
 
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
@@ -48,26 +49,12 @@ export default function CardContent() {
     fetchFlashCard();
   }, []);
 
-  useEffect(() => {
-    if (
-      Object.keys(flashCardContent).length !== 0 &&
-      currentFlashCardCategory !== null
-    ) {
-      const file = require(`./soundSrc/${currentFlashCardCategory.question[activeFlashCardIndex].soundUrl}`);
-      setSoundFile(file);
-    }
-  }, [currentFlashCardCategory, activeFlashCardIndex, flashCardContent]);
-
   if (flashCardContent === undefined) {
     return <ErrorMessage errorMessage="Flash Card ID is not valid" />;
   }
 
   function handleRotate() {
     setIsRotate((prev) => !prev);
-  }
-
-  function play() {
-    new Audio(soundFile).play();
   }
 
   function handleLeftClick() {
@@ -110,6 +97,10 @@ export default function CardContent() {
   if (isLoading) {
     return <p>Fetching Flash Card Content</p>;
   }
+  if (currentFlashCardCategory)
+    console.log(
+      currentFlashCardCategory.question[activeFlashCardIndex].soundUrl
+    );
 
   console.log(soundFile);
   return (
@@ -188,7 +179,17 @@ export default function CardContent() {
                           ].answer
                         }
                       </h1>
-                      <button onClick={play}>Play Sound</button>
+
+                      <AudioPlayer
+                        autoPlay
+                        src={
+                          currentFlashCardCategory.question[
+                            activeFlashCardIndex
+                          ].soundUrl
+                        }
+                        onPlay={(e) => console.log("onPlay")}
+                        // other props here
+                      />
                     </div>
                   )}
                 </div>
