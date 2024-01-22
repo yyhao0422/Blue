@@ -161,9 +161,9 @@ function FlashCard() {
                 return (
                   <ExistRecord
                     key={recordData.id}
-                    recordData={recordData}
+                    recordDataId={recordData.id}
                     AdminId={AdminId}
-                    refreshFlashCard={() => {
+                    refreshParentFlashCard={() => {
                       setRefresh((prev) => !prev);
                     }}
                   />
