@@ -11,8 +11,6 @@ export default function Settings() {
   const { isLoaded, session, isSignedIn } = useSession();
   const ClerkCtx = useContext(ClerkContext);
 
-  console.log(ClerkCtx);
-
   return (
     <div className="m-20">
       <h1 className="">Personal Information</h1>

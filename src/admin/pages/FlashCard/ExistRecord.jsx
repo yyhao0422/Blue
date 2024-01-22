@@ -1,12 +1,140 @@
 import { useRef, useState } from "react";
+import ExistCardContent from "./ExistCardContent";
 function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
-  const editFlashCardDialog = useRef();
-
   const [isEditingContent, setisEditingContent] = useState(false);
   const [isDeleteLoading, setIsDeleletLoading] = useState(false);
   const [isUpdateCardDetail, setIsUpdateCardDetail] = useState(false);
+  const [isLoadingAddContent, setIsLoadingAddContent] = useState(false);
+  const [statusAddNewContent, setStatusAddNewContent] = useState(null);
   const [updateFlashCardResult, setUpdateFlashCardResult] = useState(null);
   const [error, setError] = useState("");
+
+  const editFlashCardDialog = useRef();
+
+  // New Card Content reference hook
+  const newContentTitle = useRef();
+  const newImageSrc = useRef();
+  const newUploadSound = useRef();
+
+  async function handleNewContent() {
+    setIsLoadingAddContent(true);
+    const imageFd = new FormData();
+    imageFd.append("upload", newImageSrc.current.files[0]);
+    imageFd.append("dirname", "Images");
+    const soundFd = new FormData();
+    soundFd.append("upload", newUploadSound.current.files[0]);
+    soundFd.append("dirname", "Images");
+    const fileUploadHeaders = new Headers();
+    fileUploadHeaders.append("ClerkId", AdminId);
+    fileUploadHeaders.append("Accept", "application/json");
+
+    try {
+      const responseUploadImage = await fetch(
+        "https://api.alexsama.tech/api/upload-file",
+        {
+          method: "POST",
+          body: imageFd,
+          headers: fileUploadHeaders,
+        }
+      );
+
+      const resDataImage = await responseUploadImage.json();
+
+      if (!responseUploadImage.ok) {
+        throw new Error("Fail to add Images files !");
+      }
+
+      const responseUploadSound = await fetch(
+        "https://api.alexsama.tech/api/upload-file",
+        {
+          method: "POST",
+          body: soundFd,
+          headers: fileUploadHeaders,
+        }
+      );
+
+      const resDataSound = await responseUploadSound.json();
+
+      if (!responseUploadSound.ok) {
+        throw new Error("Fail to add Sound File");
+      }
+
+      console.log(
+        JSON.stringify({
+          question: newContentTitle.current.value,
+          answer: newContentTitle.current.value,
+          imageUrl: resDataImage.data,
+          soundUrl: resDataSound.data,
+        })
+      );
+      const responseUploadQuestion = await fetch(
+        "https://api.alexsama.tech/api/flash-card-question",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            question: newContentTitle.current.value,
+            answer: newContentTitle.current.value,
+            imageUrl: resDataImage.data,
+            soundUrl: resDataSound.data,
+          }),
+          headers: {
+            ClerkId: AdminId,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const resDataQuestion = await responseUploadQuestion.json();
+      if (!responseUploadImage.ok) {
+        throw new Error("Fail to upload Question");
+      }
+
+      //Get Previous Question ID
+      const questionIds = [];
+      recordData.question.map((question) => {
+        questionIds.push(question.id);
+      });
+
+      //Add new Question ID into Previous ID
+
+      questionIds.push(resDataQuestion.data.id);
+
+      const responseUpdateCategory = await fetch(
+        `https://api.alexsama.tech/api/flash-card-category/${recordData.id}`,
+        {
+          method: "PUT",
+          headers: {
+            ClerkId: AdminId,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: recordData.title,
+            description: recordData.description,
+            imageUrl: recordData.imageUrl,
+            flashCardQuestionIds: questionIds,
+          }),
+        }
+      );
+
+      if (!responseUpdateCategory) {
+        throw new Error("Fail to update category!");
+      }
+
+      const resDataUpdateCategory = await responseUpdateCategory.json();
+
+      if (responseUpdateCategory) {
+        setStatusAddNewContent("Successfully Added");
+        refreshFlashCard();
+      }
+    } catch (error) {
+      setError({
+        message: error.message || `Fail to add Flash Card Content !`,
+      });
+    }
+    setIsLoadingAddContent(false);
+  }
 
   async function handleDeleteFlashCard() {
     setIsDeleletLoading(true);
@@ -195,61 +323,71 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
           {/*----------------- Card Content ------------------------ */}
 
           {isEditingContent && (
-            <div className="flex flex-col">
-              {recordData.question?.map((question) => {
-                return (
-                  <div className="flex justify-between items-center my-2 ">
-                    <h1 className="mr-3 whitespace-nowrap">
-                      ContentID {question.id} :
-                    </h1>
-                    <div className="flex w-full border py-2 px-2 rounded-md">
-                      <div className="flex items-center mx-2 w-1/3">
-                        <label>Content Title :</label>
-                        <p className="mx-3">{question.question}</p>
-                      </div>
-                      <div className="flex items-center mx-2 w-1/3">
-                        <label>Image URL :</label>
-                        <img src={question.imageUrl} className="w-10 mx-3" />
-                      </div>
-                      <div className="flex items-center mx-2 w-1/3">
-                        <label>Sound Src:</label>
-                        <p className="mx-3">{question.soundUrl}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+            <>
+              {/* --------------------------Existing Card Content----------------------- */}
+              <div className="flex flex-col">
+                {recordData.question?.map((question) => {
+                  return (
+                    <ExistCardContent
+                      index={question.id}
+                      question={question}
+                      refreshFlashCard={refreshFlashCard}
+                    />
+                  );
+                })}
+              </div>
+              {/* ------------------------------New Card Content------------------------------ */}
               <div className="flex justify-between items-center my-2">
                 <h1 className="mr-3">New Content</h1>
                 <div className="bg-cyan-300 py-1 px-2 rounded-md">
                   <label htmlFor="title">Content Title :</label>
                   <input
                     id="title"
-                    name="title"
+                    ref={newContentTitle}
                     type="text"
                     className="m-2 border"
                     required
                   />
-                  <label htmlFor="imageUrl">Image URL :</label>
+                  <label htmlFor="imageUrl">Image src :</label>
                   <input
-                    name="imageUrl"
+                    ref={newImageSrc}
                     id="imageUrl"
-                    type="text"
+                    type="file"
                     className="m-2 border"
                     required
                   />
                   <label htmlFor="soundFile">Upload Sound :</label>
                   <input
-                    name="soundFile"
+                    ref={newUploadSound}
                     id="soundFile"
                     type="file"
-                    accept=".m4a, .mp3, .webm"
+                    accept=".m4a,.mp3,.webm"
                     className="m-2 border"
                     required
                   />
                 </div>
+                <i
+                  className="mx-2 cursor-pointer hover:bg-gray-300 rounded-[50px]"
+                  onClick={handleNewContent}
+                >
+                  <svg
+                    width="40px"
+                    height="40px"
+                    viewBox="0 -0.5 25 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5.5 12.5L10.167 17L19.5 8"
+                      stroke="#000000"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </i>
               </div>
-            </div>
+            </>
           )}
           <div className="flex justify-between m-3">
             {!isEditingContent &&

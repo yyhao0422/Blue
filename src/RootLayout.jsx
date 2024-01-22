@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import ErrorMessage from "./components/ErrorMessage";
 
 export default function RootLayout({ children }) {
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
   const [isAdmin, setIsAdmin] = useState();
   const [error, setError] = useState("");
 
@@ -46,8 +46,10 @@ export default function RootLayout({ children }) {
         }
       }
     }
-    fetchIsAdmin();
-  });
+    if (isSignedIn) {
+      fetchIsAdmin();
+    }
+  }, [isLoaded, isSignedIn]);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import AudioPlayer from "react-h5-audio-player";
 
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
@@ -56,10 +57,6 @@ export default function CardContent() {
     setIsRotate((prev) => !prev);
   }
 
-  function play() {
-    new Audio(soundFile).play();
-  }
-
   function handleLeftClick() {
     setActiveFlashCardIndex((prev) => prev - 1);
   }
@@ -100,6 +97,10 @@ export default function CardContent() {
   if (isLoading) {
     return <p>Fetching Flash Card Content</p>;
   }
+  if (currentFlashCardCategory)
+    console.log(
+      currentFlashCardCategory.question[activeFlashCardIndex].soundUrl
+    );
 
   console.log(soundFile);
   return (
@@ -178,7 +179,17 @@ export default function CardContent() {
                           ].answer
                         }
                       </h1>
-                      <button onClick={play}>Play Sound</button>
+
+                      <AudioPlayer
+                        autoPlay
+                        src={
+                          currentFlashCardCategory.question[
+                            activeFlashCardIndex
+                          ].soundUrl
+                        }
+                        onPlay={(e) => console.log("onPlay")}
+                        // other props here
+                      />
                     </div>
                   )}
                 </div>
