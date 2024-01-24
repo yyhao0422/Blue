@@ -1,0 +1,42 @@
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/clerk-react";
+
+export function useFetchTestCategory() {
+  const { isSignedIn, user, isLoaded } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [testCategory, setTestCategory] = useState([]);
+
+  useEffect(() => {
+    const headers = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ClerkId: user?.id,
+      },
+    };
+    try {
+      const fetchTestCategory = async () => {
+        setIsLoading(true);
+        const response = await fetch(
+          "https://api.alexsama.tech/api/autism-test-category",
+          headers
+        );
+        const resData = await response.json();
+        setTestCategory(resData.data);
+        if (!response.ok) {
+          throw new Error("Failed to fetch Test Category");
+        }
+        setIsLoading(false);
+      };
+
+      fetchTestCategory();
+    } catch (error) {
+      setError({
+        message: error.message || "Failed to fetch Test Category",
+      });
+    }
+  }, [user]);
+
+  return { isLoading, error, testCategory };
+}

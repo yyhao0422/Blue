@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { AUTISMTESTDUMMY } from "./AUTISMTESTDUMMY";
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
 
