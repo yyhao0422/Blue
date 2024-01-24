@@ -97,6 +97,7 @@ function ExistCardContent({ question, refreshFlashCard, AdminId }) {
     }
 
     setIsLoading(false);
+    handleEditCloseModal();
   }
   async function handleDeleteAction() {
     setIsLoadingDelete(true);
