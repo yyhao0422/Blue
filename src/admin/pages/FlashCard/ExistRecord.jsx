@@ -334,7 +334,7 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
         <form method="dialog" onSubmit={handleEditCardDetail}>
           {/*----------------- Card Detail ------------------------ */}
           {updateFlashCardResult !== null && <p>{updateFlashCardResult}</p>}
-          {!isUpdateCardDetail && <p>Loading ... </p>}
+
           {!isEditingContent &&
             updateFlashCardResult === null &&
             recordData !== null &&
