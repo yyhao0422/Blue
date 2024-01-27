@@ -30,8 +30,6 @@ function AutismTest() {
     e.target.reset();
   }
 
-  console.log(response);
-
   if (response.ok) {
     setRefresh((prev) => !prev);
     newTestDialog.current.close();
@@ -77,6 +75,7 @@ function AutismTest() {
                   id={test.id}
                   title={test.title}
                   description={test.description}
+                  question={test.question}
                   setRefresh={() => setRefresh((prev) => !prev)}
                 />
               ))}
