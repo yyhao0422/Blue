@@ -1,10 +1,13 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 
 function ExistTestQuestion({ id, count, question, setRefresh }) {
   const { user } = useUser();
+  const editModel = useRef();
+  const [input, setInput] = useState({});
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [isLoadingEdit, setIsLoadingEdit] = useState(false);
   const [error, setError] = useState("");
 
   const currentQuestionClient = axios.create({
@@ -15,6 +18,16 @@ function ExistTestQuestion({ id, count, question, setRefresh }) {
     },
   });
 
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setInput((prevInput) => {
+      return {
+        ...prevInput,
+        [name]: value,
+      };
+    });
+  }
+
   async function handleDeleteAction() {
     setIsLoadingDelete(true);
     try {
@@ -24,22 +37,47 @@ function ExistTestQuestion({ id, count, question, setRefresh }) {
         message: err.message || "Failed to delete test question",
       });
     }
+    setRefresh();
   }
-  async function handleEditAction() {}
-  async function handleNewAction() {}
 
-  //   (async () => {
-  //     setIsLoadingQuestion(true);
-  //     try {
-  //       const response = await currentQuestionClient.get(`${id}`);
-  //       setFetehedData(response.data.data);
-  //     } catch (err) {
-  //       setError({
-  //         message: err.message || "Failed to fetch test question",
-  //       });
-  //     }
-  //     setIsLoadingQuestion(false);
-  //   })();
+  function openEditModel() {
+    editModel.current.showModal();
+  }
+  function closeEditModel() {
+    editModel.current.close();
+  }
+
+  async function handleEditAction(event) {
+    event.preventDefault();
+    console.log("edit");
+
+    setIsLoadingEdit(true);
+
+    const body = JSON.stringify({
+      question: input.question,
+      description: input.description,
+    });
+    try {
+      const response = await fetch(
+        "https://api.alexsama.tech/api/autism-test-question/" + id,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            ClerkId: user?.id,
+          },
+          body: body,
+        }
+      );
+    } catch (err) {
+      setError({
+        message: err.message || "Failed to edit test question",
+      });
+    }
+    setRefresh();
+    setIsLoadingEdit(false);
+    closeEditModel();
+  }
 
   return (
     <>
@@ -55,7 +93,7 @@ function ExistTestQuestion({ id, count, question, setRefresh }) {
             <p className="mx-3">{question[count - 1].description}</p>
           </div>
         </div>
-        <button type=" button" className="mx-2" onClick={handleEditAction}>
+        <button type="button" className="mx-2" onClick={openEditModel}>
           Edit
         </button>
         <button
@@ -67,6 +105,42 @@ function ExistTestQuestion({ id, count, question, setRefresh }) {
           Delete
         </button>
       </div>
+      <dialog ref={editModel}>
+        <form method="dialog">
+          <h1 className="mt-2 mb-4 text-center bold">Edit Question</h1>
+          <div className="p-3">
+            <h1>Question No: {count}</h1>
+          </div>
+          <div className="p-3 flex justify-between">
+            <label>Question :</label>
+            <input
+              className="border mx-2 ml-10 w-96"
+              type="text"
+              name="question"
+              placeholder={question[count - 1].question}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="p-3 flex justify-between">
+            <label>Description :</label>
+            <input
+              className="border mx-2 ml-10 w-96"
+              type="text"
+              name="description"
+              placeholder={question[count - 1].description}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="flex justify-around m-4 ">
+            <button type="submit" onClick={handleEditAction}>
+              Edit
+            </button>
+            <button type="button" onClick={closeEditModel}>
+              Close
+            </button>
+          </div>
+        </form>
+      </dialog>
     </>
   );
 }
