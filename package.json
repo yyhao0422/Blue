@@ -21,7 +21,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start .env",
+    "start": "react-scripts start .env ",
+    "dev": "npx tailwindcss -i ./src/index.css -o ./public/output.css --watch",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
