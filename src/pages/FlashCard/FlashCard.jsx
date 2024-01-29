@@ -60,24 +60,23 @@ export default function FlashCard() {
 
   return (
     <Fragment>
-        {isLoading ? (
-            <div className="flex h-screen w-full justify-center items-center">
-                <img src={loader} alt="loading.gif" height="100" width="100"/>
-            </div>
-        ) : (
-          <div className="grid grid-cols-4 grid-rows-3 gap-4 p-3.5">
+      {isLoading ? (
+        <div className="flex h-screen w-full justify-center items-center">
+          <img src={loader} alt="loading.gif" height="100" width="100" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 ">
           {flashCardInfo.map((card) => (
-              <Card
-                  title={card.title}
-                  link={`/flashcard/${card.id}`}
-                  image={card.imageUrl}
-                  alt={card.description}
-                  key={card.id}
-              />
+            <Card
+              title={card.title}
+              link={`/flashcard/${card.id}`}
+              image={card.imageUrl}
+              alt={card.description}
+              key={card.id}
+            />
           ))}
-      </div>
-        )}
+        </div>
+      )}
     </Fragment>
-);
-
+  );
 }

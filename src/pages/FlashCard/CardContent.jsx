@@ -2,7 +2,7 @@ import { useState, useEffect, useContext, Fragment } from "react";
 import { useParams, Link } from "react-router-dom";
 import AudioPlayer from "react-h5-audio-player";
 import loader from "../../images/loader.gif";
-import imageUnavailable from "../../images/image-unavailable.jpg"
+import imageUnavailable from "../../images/image-unavailable.jpg";
 import audioSpeaker from "../../images/audio.svg";
 import leftArrow from "../../images/left-arrow.svg";
 import rightArrow from "../../images/right-arrow.svg";
@@ -64,18 +64,25 @@ export default function CardContent() {
 
   function handleLeftClick() {
     var toIndex = activeFlashCardIndex - 1;
-    if (toIndex === -1)
-      return
+    if (toIndex === -1) return;
 
     setActiveFlashCardIndex((prev) => prev - 1);
   }
 
   function handleRightClick() {
     var toIndex = activeFlashCardIndex + 1;
-    if (toIndex >= currentFlashCardCategory.question.length)
-      return
+    if (toIndex >= currentFlashCardCategory.question.length) return;
 
     setActiveFlashCardIndex((prev) => prev + 1);
+  }
+  function handleKeyBoard(e) {
+    console.log(e);
+    console.log("askfljajsd");
+    if (e.keyCode === 37 || e.keyCode === 38) {
+      handleLeftClick();
+    } else if (e.keyCode === 39 || e.keyCode === 40) {
+      handleRightClick();
+    }
   }
 
   function playAudio(url) {
@@ -113,42 +120,70 @@ export default function CardContent() {
 
   if (isLoading) {
     return (
-        <div className="flex h-screen w-full justify-center items-center">
-            <img src={loader} alt="loading.gif" height="100" width="100"/>
-        </div>
-    )
+      <div className="flex h-screen w-full justify-center items-center">
+        <img src={loader} alt="loading.gif" height="100" width="100" />
+      </div>
+    );
   }
 
   var currentCard = currentFlashCardCategory?.question[activeFlashCardIndex];
 
   return (
     <Fragment>
-        {isLoading ? (
-          <div className="flex h-screen w-full justify-center items-center">
-            <img src={loader} alt="loading.gif" height="100" width="100"/>
-          </div>
-        ) : (
-          <div className="flex justify-center w-full items-center">
-            <div className="flex-col space-y-5">
-              <div className="text-center">Animals</div>
-              <div className="flex items-center space-x-5">
-              <img className="cursor-pointer" src={leftArrow} alt="left-arrow.svg" height="50" width="50" onClick={handleLeftClick} />
-              <div className="bg-cyan-200 shadow-2xl p-5">
+      {isLoading ? (
+        <div className="flex h-screen w-full justify-center items-center">
+          <img src={loader} alt="loading.gif" height="100" width="100" />
+        </div>
+      ) : (
+        <div className="flex justify-center w-full items-center">
+          <div className="flex-col space-y-5">
+            <div tabIndex="0" onKeyPress={handleKeyBoard}></div>
+            <div className="text-center">Animals</div>
+            <div className="flex items-center space-x-5">
+              <img
+                className="cursor-pointer hover:scale-150 transition-all duration-900"
+                src={leftArrow}
+                alt="left-arrow.svg"
+                height="50"
+                width="50"
+                onClick={handleLeftClick}
+              />
+              <div className="bg-gradient-to-r from-[#BBD0FF] to-[#C8B6FF] shadow-2xl p-5">
                 <div className="flex items-center h-[500px] border-solid border-2 border-black color-slate p-5">
                   <div className="flex-col space-y-5">
-                    <img className="h-40 w-[250px]" src={currentCard.imageUrl ?? imageUnavailable} />
-                    <span className="block text-center">{currentCard.question}</span>
+                    <img
+                      className="h-40 w-[250px] rounded-2xl"
+                      src={currentCard.imageUrl ?? imageUnavailable}
+                      alt="card content"
+                    />
+                    <span className="block text-center">
+                      {currentCard.question}
+                    </span>
                     <div className="flex justify-center">
-                      <img className="cursor-pointer" src={audioSpeaker} alt="speaker.svg" height="50" width="50" onClick={() => playAudio(currentCard.soundUrl)} />
+                      <img
+                        className="cursor-pointer"
+                        src={audioSpeaker}
+                        alt="speaker.svg"
+                        height="50"
+                        width="50"
+                        onClick={() => playAudio(currentCard.soundUrl)}
+                      />
                     </div>
                   </div>
                 </div>
               </div>
-              <img className="cursor-pointer" src={rightArrow} alt="right-arrow.svg" height="50" width="50" onClick={handleRightClick} />
+              <img
+                className="cursor-pointer hover:scale-150 transition-all duration-900"
+                src={rightArrow}
+                alt="right-arrow.svg"
+                height="50"
+                width="50"
+                onClick={handleRightClick}
+              />
             </div>
-            </div>
+          </div>
         </div>
-        )}
+      )}
     </Fragment>
   );
 }
