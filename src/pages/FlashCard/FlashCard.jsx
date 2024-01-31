@@ -4,6 +4,7 @@ import Card from "../../components/Card";
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
 import loader from "../../images/loader.gif";
+import { motion } from "framer-motion";
 
 export default function FlashCard() {
   const [flashCardInfo, setFlashCardInfo] = useState([]);
@@ -65,7 +66,13 @@ export default function FlashCard() {
           <img src={loader} alt="loading.gif" height="100" width="100" />
         </div>
       ) : (
-        <div className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 ">
+        <motion.div
+          initial={{ opacity: 0 }}
+          transition={{ delay: 0.5 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 "
+        >
           {flashCardInfo.map((card) => (
             <Card
               title={card.title}
@@ -75,7 +82,7 @@ export default function FlashCard() {
               key={card.id}
             />
           ))}
-        </div>
+        </motion.div>
       )}
     </Fragment>
   );

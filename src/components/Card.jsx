@@ -5,7 +5,7 @@ export default function FlashCardComponent({ title, link, image, alt, state }) {
     <Link
       to={link}
       state={state}
-      className="bg-gradient-to-r from-[#FFD6FF] to-[#E7C6FF] card-item overflow-hidden p-5 pb-0 transition-all duration-500 hover:shadow-2xl hover:scale-105 group"
+      className="bg-gradient-to-r from-[#FFD6FF] to-[#E7C6FF] card-item overflow-hidden p-5 pb-0 transition-all duration-500  hover:shadow-2xl hover:scale-105 group"
     >
       <img
         className="h-4/5 w-full group-hover:rounded-none rounded-3xl"
