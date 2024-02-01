@@ -7,6 +7,7 @@ import {
 import { useContext } from "react";
 import { ClerkContext } from "../../store/clerk-user-context";
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 export default function Settings() {
   const { isLoaded, session, isSignedIn } = useSession();
   const ClerkCtx = useContext(ClerkContext);
@@ -19,15 +20,11 @@ export default function Settings() {
         <p className=" mr-5">Account:</p>
         {!isSignedIn ? (
           <SignInButton>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Login
-            </button>
+            <Button>Login</Button>
           </SignInButton>
         ) : (
           <SignOutButton>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Logout
-            </button>
+            <Button variant="contained">Logout</Button>
           </SignOutButton>
         )}
       </div>
@@ -35,9 +32,7 @@ export default function Settings() {
         <div className="flex items-center  my-10">
           <p className=" mr-5">Administrator login: </p>
           <Link to="/admin">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Switch to admin page
-            </button>
+            <Button variant="contained">Switch to admin page</Button>
           </Link>
         </div>
       )}

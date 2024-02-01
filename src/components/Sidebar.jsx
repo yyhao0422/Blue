@@ -2,6 +2,7 @@ import { useContext, useState, createContext } from "react";
 import { NavLink } from "react-router-dom";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { UserButton, useUser, SignInButton } from "@clerk/clerk-react";
+import { Button } from "@mui/material";
 
 import blueLogo from "../images/logo-blue.png";
 import userLogo from "../images/user-logo.jpg";
@@ -15,7 +16,7 @@ export default function Sidebar({ children }) {
 
   return (
     <aside
-      className={`h-screen sticky top-0 ${
+      className={`h-screen sticky top-0 transition-all duration-500 ${
         isExpended ? "w-[300px]" : "w-[90px]"
       }`}
     >
@@ -24,7 +25,7 @@ export default function Sidebar({ children }) {
           {/* Blue Logo */}
           <img
             src={blueLogo}
-            className={`overflow-hidden transition-all pb-4 ${
+            className={`overflow-hidden transition-all duration-500 pb-4 ${
               isExpended ? "w-48" : "w-0"
             }`}
             alt=""
@@ -39,8 +40,18 @@ export default function Sidebar({ children }) {
         </div>
 
         {/* Wrapping the Children here! */}
-        <SidebarContext.Provider value={{ isExpended }}>
-          <ul className="flex-1 px-3">{children}</ul>
+        <SidebarContext.Provider value={{ isExpended, setIsExpended }}>
+          <ul
+            className={`flex flex-col mx-3 h-min mb-auto ${
+              !isExpended ? "mt-[30px]" : ""
+            }`}
+            onMouseEnter={() => setIsExpended(true)}
+            onMouseLeave={() => {
+              setIsExpended(false);
+            }}
+          >
+            {children}
+          </ul>
         </SidebarContext.Provider>
 
         {/* This is the bottom client info */}
@@ -52,14 +63,14 @@ export default function Sidebar({ children }) {
           ) : (
             <SignInButton>
               <div className="rounded-xl bg-cyan-300 hover:bg-cyan-500 p-[10px] w-48 text-center cursor-pointer">
-                <button>Sign In</button>
+                <Button>Sign In</Button>
               </div>
             </SignInButton>
           )}
 
           {isSignedIn && (
             <div
-              className={`flex justify-between items-center overflow-hidden transition-all ${
+              className={`flex justify-between items-center overflow-hidden transition-all duration-500 ${
                 isExpended ? "w-52 ml-3" : "w-0"
               }`}
             >
@@ -80,7 +91,7 @@ export default function Sidebar({ children }) {
 
 // Sidebar Item will become children inside the component
 export function SidebarItem({ icon, text, active, alert, isAdmin }) {
-  const { isExpended } = useContext(SidebarContext);
+  const { isExpended, setIsExpended } = useContext(SidebarContext);
   const linkText = text.toLowerCase().replaceAll(" ", "");
 
   return (
@@ -96,11 +107,11 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
       <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600">
         {icon}
         <span
-          className={`overflow-hidden transition-all ${
-            isExpended ? "w-52 ml-3" : "w-0"
+          className={`overflow-hidden transition-all  ${
+            isExpended ? "w-52 ml-3" : " w-0"
           }`}
         >
-          {text}
+          <p className={`text-nowrap ${isExpended ? "" : "hidden"}`}> {text}</p>
         </span>
         {alert && (
           <div
@@ -113,7 +124,7 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
         {/* Hover Effect */}
         {!isExpended && (
           <div
-            className={`absolute whitespace-nowrap left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+            className={`absolute whitespace-nowrap left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all  group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
           >
             {text}
           </div>
