@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import AdminHome from "./admin/pages/Home";
 import AdminFlashCard from "./admin/pages/FlashCard/FlashCard";
-import AdminAutismTest from "./admin/pages/AutismTest";
+import AdminAutismTest from "./admin/pages/AutismTest/AutismTest";
 import AdminVideo from "./admin/pages/Video";
 import RootLayout from "./RootLayout";
 import AiChat from "./pages/AiChat/AiChat";

@@ -4,10 +4,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./components/Sidebar";
 import { AdminClerkContext } from "./store/admin-clerk-user-context";
 
-import {
-  __internal__setErrorThrowerOptions,
-  useUser,
-} from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import {
   homeIcon,
   cardIcon,

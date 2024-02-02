@@ -1,8 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import ExistCardContent from "./ExistCardContent";
-function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
+
+function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
+  const [refreshCardContent, setRefreshCardContent] = useState(false);
   const [isEditingContent, setisEditingContent] = useState(false);
   const [isDeleteLoading, setIsDeleletLoading] = useState(false);
+  const [recordData, setRecordData] = useState({});
+  const [isLoadingGetCategoryData, setIsLoadingGetCategoryData] =
+    useState(false);
   const [isUpdateCardDetail, setIsUpdateCardDetail] = useState(false);
   const [isLoadingAddContent, setIsLoadingAddContent] = useState(false);
   const [statusAddNewContent, setStatusAddNewContent] = useState(null);
@@ -15,6 +21,41 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
   const newContentTitle = useRef();
   const newImageSrc = useRef();
   const newUploadSound = useRef();
+
+  useEffect(() => {
+    async function fetchCurrentCateroryRecordData() {
+      setIsLoadingGetCategoryData(true);
+      try {
+        const response = await fetch(
+          `https://api.alexsama.tech/api/flash-card-category/${recordDataId}`,
+          {
+            headers: {
+              ClerkId: AdminId,
+              Accept: "application/json",
+            },
+          }
+        );
+        const resData = await response.json();
+        console.log(resData);
+        setRecordData(resData.data);
+        if (!response.ok) {
+          throw new Error("Fail to fetch current category");
+        }
+      } catch (error) {
+        setError({
+          message: error.message || `Fail to fetch Current Category Item !`,
+        });
+      }
+      setIsLoadingGetCategoryData(false);
+    }
+    fetchCurrentCateroryRecordData();
+  }, [recordDataId, refreshCardContent]);
+
+  if (recordData !== null) console.log(recordData);
+
+  function refreshFlashCard() {
+    setRefreshCardContent((prev) => !prev);
+  }
 
   async function handleNewContent() {
     setIsLoadingAddContent(true);
@@ -161,7 +202,7 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
       });
     }
     setIsDeleletLoading(false);
-    refreshFlashCard();
+    refreshParentFlashCard();
   }
   //Handle Edit Button
   function handleEditFlashCard() {
@@ -240,25 +281,36 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
   }
 
   return (
-    <tr>
-      <td className="p-2">{recordData.id}</td>
-      <td className="p-2">{recordData.title}</td>
-      <td className="p-2">
-        <img src={recordData.imageUrl} className="w-10" />
-      </td>
-      <td className="p-2">{recordData.description}</td>
-      <td className="p-2">
-        <button className="mx-2" onClick={handleEditFlashCard}>
-          Edit
-        </button>
-        {!isDeleteLoading && (
-          <button className="mx-2" onClick={handleDeleteFlashCard}>
-            Delete
-          </button>
-        )}
-        {isDeleteLoading && <p>Loading ...</p>}
-      </td>
-      {/* ----------------Edit Dialog ---------------- */}
+    <>
+      {isLoadingGetCategoryData && (
+        <tr>
+          <td>
+            <p>Fetching the data ...</p>
+          </td>
+        </tr>
+      )}
+      {!isLoadingGetCategoryData && (
+        <tr>
+          <td className="p-2">{recordData.id}</td>
+          <td className="p-2">{recordData.title}</td>
+          <td className="p-2">
+            <img src={recordData.imageUrl} className="w-10" />
+          </td>
+          <td className="p-2">{recordData.description}</td>
+          <td className="p-2">
+            <button className="mx-2" onClick={handleEditFlashCard}>
+              Edit
+            </button>
+            {!isDeleteLoading && (
+              <button className="mx-2" onClick={handleDeleteFlashCard}>
+                Delete
+              </button>
+            )}
+            {isDeleteLoading && <p>Loading ...</p>}
+          </td>
+          {/* ----------------Edit Dialog ---------------- */}
+        </tr>
+      )}
       <dialog ref={editFlashCardDialog} className="p-3 rounded-lg">
         <h1 className="mt-2 mb-4">Flash Card</h1>
         <div className="flex justify-around mb-3">
@@ -282,9 +334,10 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
         <form method="dialog" onSubmit={handleEditCardDetail}>
           {/*----------------- Card Detail ------------------------ */}
           {updateFlashCardResult !== null && <p>{updateFlashCardResult}</p>}
-          {isUpdateCardDetail && <p>Loading ... </p>}
+
           {!isEditingContent &&
             updateFlashCardResult === null &&
+            recordData !== null &&
             !isUpdateCardDetail && (
               <div className="flex flex-col">
                 <div className="flex justify-between items-center">
@@ -332,6 +385,7 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
                       index={question.id}
                       question={question}
                       refreshFlashCard={refreshFlashCard}
+                      AdminId={AdminId}
                     />
                   );
                 })}
@@ -399,7 +453,7 @@ function ExistRecord({ recordData, AdminId, refreshFlashCard }) {
           </div>
         </form>
       </dialog>
-    </tr>
+    </>
   );
 }
 

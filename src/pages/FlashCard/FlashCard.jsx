@@ -1,13 +1,15 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, Fragment } from "react";
 import { useSession } from "@clerk/clerk-react";
 import Card from "../../components/Card";
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
+import loader from "../../images/loader.gif";
+import { motion } from "framer-motion";
 
 export default function FlashCard() {
-  const [flashCardInfo, setFlashCardInfo] = useState({});
+  const [flashCardInfo, setFlashCardInfo] = useState([]);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { isLoaded, isSignedIn } = useSession();
   const clerkCtx = useContext(ClerkContext).user;
   const clerkId = clerkCtx?.id;
@@ -58,25 +60,33 @@ export default function FlashCard() {
   console.log(flashCardInfo);
 
   return (
-    <>
-      <div className="flex flex-col">
-        <h1 className="text-center font-bold text-5xl mt-5">Flash Card</h1>
-        {isLoading && <p>Fetching the data ...</p>}
-        <div className="flex flex-wrap w-fit">
-          {Object.keys(flashCardInfo).length !== 0 &&
-            flashCardInfo.map((card) => {
-              return (
-                <Card
-                  title={card.title}
-                  link={`/flashcard/${card.id}`}
-                  image={card.imageUrl}
-                  alt={card.description}
-                  key={card.id}
-                />
-              );
-            })}
+    <Fragment>
+      {isLoading ? (
+        <div className="flex h-screen w-full justify-center items-center">
+          <img src={loader} alt="loading.gif" height="100" width="100" />
         </div>
-      </div>
-    </>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          transition={{ delay: 0.5 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="flex flex-col"
+        >
+          <h1 className="text-center font-bold text-5xl mt-5">Flash Card</h1>
+          <div className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 ">
+            {flashCardInfo.map((card) => (
+              <Card
+                title={card.title}
+                link={`/flashcard/${card.id}`}
+                image={card.imageUrl}
+                alt={card.description}
+                key={card.id}
+              />
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </Fragment>
   );
 }

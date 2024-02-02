@@ -1,9 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import Card from "@mui/material/Card";
+import { motion } from "framer-motion";
+import CardContent from "@mui/material/CardContent";
 
-import { AUTISMTESTDUMMY } from "./AUTISMTESTDUMMY";
 import ErrorMessage from "../../components/ErrorMessage";
+import loader from "../../images/loader.gif";
 import { ClerkContext } from "../../store/clerk-user-context";
+import { Button, Typography } from "@mui/material";
 
 function Quiz() {
   const { testId } = useParams();
@@ -107,71 +111,128 @@ function Quiz() {
     activeQuestionIndex >= targetTestContent?.length
   ) {
     return (
-      <div>
-        {`Your score is ${userScore}`}
-        <div>
-          <p>
-            {userScore >= 6
-              ? "Consider referring them for a specialist diagnostic assessment."
-              : "H'She are normal or mild, consider referring them for a specialist diagnostic assessment for more detail"}
-          </p>
-          <br />
-          <p>
-            <span className="text-bold">USE:</span>
-            This is the adolescent version of the test recommended in the NICE
-            clinical guideline CG142. www.nice.org.uk/CG142
-          </p>
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        transition={{ delay: 0.5 }}
+        animate={{ opacity: 1, y: -100 }}
+        exit={{ opacity: 0 }}
+        className="h-min m-auto  "
+      >
+        <Card
+          sx={{
+            maxWidth: "500px",
+          }}
+          className="p-5 leading-6"
+        >
+          <Typography
+            variant="h3"
+            sx={{ marginBottom: 5 }}
+            className="text-center"
+          >
+            Your score is{" "}
+            <span
+              className={`${userScore <= 6 ? "text-red-400" : "text-blue-400"}`}
+            >{`${userScore}`}</span>
+          </Typography>
+          <hr />
+          <div>
+            <Typography variant="subtitle1" sx={{ margin: 3 }}>
+              {userScore <= 6
+                ? "Consider referring them for a specialist diagnostic assessment."
+                : "H'She are normal or mild, consider referring them for a specialist diagnostic assessment for more detail"}
+            </Typography>
+            <br />
+            <Typography variant="caption">
+              <span className="text-bold">USE:</span>
+              This is the adolescent version of the test recommended in the NICE
+              clinical guideline CG142.{" "}
+              <a
+                href="//www.nice.org.uk/CG142"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-500"
+              >
+                www.nice.org.uk/CG142
+              </a>
+            </Typography>
+          </div>
+        </Card>
+      </motion.div>
     );
   }
 
   return (
     <>
-      {isLoading && <p>Fetching Autism test Data</p>}
-      {Object.keys(targetTestContent).length !== 0 && (
-        <div className="bg-cyan-500  max-w-[1000px] m-auto p-[2rem] rounded-xl ">
-          <h1 className="text-3xl">
-            <span className="mr-3">{`Question ${
-              activeQuestionIndex + 1
-            } :`}</span>
-            {activeQuestion.question}
-          </h1>
-          <div className="flex flex-col mt-5">
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                handleAnswer(activeQuestionIndex, "definiteAgree");
-              }}
-            >
-              Definitely Agree
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                handleAnswer(activeQuestionIndex, "slightlyAgree");
-              }}
-            >
-              Slightly Agree
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                handleAnswer(activeQuestionIndex, "slightlyDisagree");
-              }}
-            >
-              Slightly Disagree
-            </div>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                handleAnswer(activeQuestionIndex, "definitelyDisagree");
-              }}
-            >
-              Definitely Disagree
-            </div>
-          </div>
+      {isLoading && (
+        <div className="postion absolute left-[700px] top-[300px]">
+          <img src={loader} alt="loading.gif" height="100" width="100" />
         </div>
+      )}
+      {Object.keys(targetTestContent).length !== 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          transition={{ delay: 0.5 }}
+          animate={{ opacity: 1, y: -100 }}
+          exit={{ opacity: 0 }}
+          className="h-min m-auto  "
+        >
+          <Card
+            sx={{
+              maxWidth: "1000px",
+            }}
+            className="p-5 leading-6"
+          >
+            <h1 className="text-3xl text-center mb-4">
+              <span className="mr-3 ">{`Question ${
+                activeQuestionIndex + 1
+              } :`}</span>
+              {activeQuestion.question}
+            </h1>
+            <hr />
+            <div className="flex flex-col items-center justify-center w-full h-full">
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                <Typography
+                  className="cursor-pointer"
+                  onClick={() => {
+                    handleAnswer(activeQuestionIndex, "definiteAgree");
+                  }}
+                >
+                  Definitely Agree
+                </Typography>
+              </Button>
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                <Typography
+                  className="cursor-pointer"
+                  onClick={() => {
+                    handleAnswer(activeQuestionIndex, "slightlyAgree");
+                  }}
+                >
+                  Slightly Agree
+                </Typography>
+              </Button>
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                <Typography
+                  className="cursor-pointer"
+                  onClick={() => {
+                    handleAnswer(activeQuestionIndex, "slightlyDisagree");
+                  }}
+                >
+                  Slightly Disagree
+                </Typography>
+              </Button>
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                <Typography
+                  className="cursor-pointer"
+                  onClick={() => {
+                    handleAnswer(activeQuestionIndex, "definitelyDisagree");
+                  }}
+                >
+                  Definitely Disagree
+                </Typography>
+              </Button>
+            </div>
+          </Card>
+        </motion.div>
       )}
 
       <div className="position absolute bottom-0 right-0 p-3 m-5 bg-blue-300 hover:bg-blue-500 rounded-lg">
