@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useSession } from "@clerk/clerk-react";
+import { motion } from "framer-motion";
 
 import ErrorMessage from "../../components/ErrorMessage.jsx";
 import imageTest from "./test.gif";
 import Card from "../../components/Card";
 import { ClerkContext } from "../../store/clerk-user-context.jsx";
+import loader from "../../images/loader.gif";
 
 export default function AutismTest() {
   const ClerkCtx = useContext(ClerkContext).user;
@@ -34,7 +36,7 @@ export default function AutismTest() {
         setAutismTestData(resData.data);
       } catch (error) {
         setError({
-          message: error.message || "Failed to fetch Flash Crad Information",
+          message: error.message || "Failed to fetch Flash Card Information",
         });
       }
       setIsLoading(false);
@@ -57,9 +59,23 @@ export default function AutismTest() {
 
   return (
     <div className="flex flex-col">
-      <h1 className="text-center font-bold text-5xl mt-5">Flash Card</h1>
-      <div className="flex flex-wrap w-fit">
-        {isLoading && <p>fetching the data</p>}
+      {!isLoading && (
+        <h1 className="text-center font-bold text-5xl mt-5">Autism Test</h1>
+      )}
+
+      {isLoading && (
+        <div className="postion absolute left-[700px] top-[300px]">
+          <img src={loader} alt="loading.gif" height="100" width="100" />
+        </div>
+      )}
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        transition={{ delay: 0.5 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 "
+      >
         {Object.keys(autismTestData).length !== 0 &&
           autismTestData.map((test) => {
             return (
@@ -67,16 +83,11 @@ export default function AutismTest() {
                 title={test.title}
                 link={`/autismtest/${test.id}`}
                 key={test.id}
-              >
-                <img
-                  className="max-h-48 rounded-3xl"
-                  src={imageTest}
-                  alt="test image"
-                />
-              </Card>
+                image={imageTest}
+              ></Card>
             );
           })}
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -71,17 +71,20 @@ export default function FlashCard() {
           transition={{ delay: 0.5 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 "
+          className="flex flex-col"
         >
-          {flashCardInfo.map((card) => (
-            <Card
-              title={card.title}
-              link={`/flashcard/${card.id}`}
-              image={card.imageUrl}
-              alt={card.description}
-              key={card.id}
-            />
-          ))}
+          <h1 className="text-center font-bold text-5xl mt-5">Flash Card</h1>
+          <div className="grid grid-cols-4 grid-rows-3 gap-14 p-3.5 m-3 transition-all duration-500 ">
+            {flashCardInfo.map((card) => (
+              <Card
+                title={card.title}
+                link={`/flashcard/${card.id}`}
+                image={card.imageUrl}
+                alt={card.description}
+                key={card.id}
+              />
+            ))}
+          </div>
         </motion.div>
       )}
     </Fragment>

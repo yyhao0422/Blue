@@ -10,13 +10,15 @@ import userLogo from "../images/user-logo.jpg";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
-  const [isExpended, setIsExpended] = useState(true);
+  const [isExpended, setIsExpended] = useState(false);
 
   const { isSignedIn, user, isLoaded } = useUser();
 
   return (
     <aside
-      className={`h-screen sticky top-0 transition-all duration-500 ${
+      onMouseEnter={() => setIsExpended(true)}
+      onMouseLeave={() => setIsExpended(false)}
+      className={`h-screen sticky top-0 transition-all duration-500  ${
         isExpended ? "w-[300px]" : "w-[90px]"
       }`}
     >
@@ -45,10 +47,6 @@ export default function Sidebar({ children }) {
             className={`flex flex-col mx-3 h-min mb-auto ${
               !isExpended ? "mt-[30px]" : ""
             }`}
-            onMouseEnter={() => setIsExpended(true)}
-            onMouseLeave={() => {
-              setIsExpended(false);
-            }}
           >
             {children}
           </ul>
