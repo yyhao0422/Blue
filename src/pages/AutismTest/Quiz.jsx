@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import Card from "@mui/material/Card";
 import { motion } from "framer-motion";
 import CardContent from "@mui/material/CardContent";
@@ -7,7 +8,8 @@ import CardContent from "@mui/material/CardContent";
 import ErrorMessage from "../../components/ErrorMessage";
 import loader from "../../images/loader.gif";
 import { ClerkContext } from "../../store/clerk-user-context";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, LinearProgress } from "@mui/material";
+import Box from "@mui/material/Box";
 
 function Quiz() {
   const { testId } = useParams();
@@ -102,6 +104,29 @@ function Quiz() {
     setActiveQuestionIndex((prev) => prev + 1);
   }
 
+  function LinearProgressWithLabel(props) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: 35 }}>
+          <Typography variant="body2" color="text.secondary">{`${Math.round(
+            props.value
+          )}%`}</Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  LinearProgressWithLabel.propTypes = {
+    /**
+     * The value of the progress indicator for the determinate and buffer variants.
+     * Value between 0 and 100.
+     */
+    value: PropTypes.number.isRequired,
+  };
+
   // if (error !== null) {
   //   return <ErrorMessage errorMessage="Fail to fetch Autism Test Data" />;
   // }
@@ -116,7 +141,7 @@ function Quiz() {
         transition={{ delay: 0.5 }}
         animate={{ opacity: 1, y: -100 }}
         exit={{ opacity: 0 }}
-        className="h-min m-auto  "
+        className="h-min m-auto"
       >
         <Card
           sx={{
@@ -129,7 +154,7 @@ function Quiz() {
             sx={{ marginBottom: 5 }}
             className="text-center"
           >
-            Your score is{" "}
+            Your score is
             <span
               className={`${userScore <= 6 ? "text-red-400" : "text-blue-400"}`}
             >{`${userScore}`}</span>
@@ -174,15 +199,18 @@ function Quiz() {
           transition={{ delay: 0.5 }}
           animate={{ opacity: 1, y: -100 }}
           exit={{ opacity: 0 }}
-          className="h-min m-auto  "
+          className="h-min m-auto w-[1000px] "
         >
+          <Box sx={{ width: "100%", marginBottom: 10 }}>
+            <LinearProgressWithLabel value={activeQuestionIndex * 10} />
+          </Box>
           <Card
             sx={{
               maxWidth: "1000px",
             }}
             className="p-5 leading-6"
           >
-            <h1 className="text-3xl text-center mb-4">
+            <h1 className="text-3xl  text-center mb-4">
               <span className="mr-3 ">{`Question ${
                 activeQuestionIndex + 1
               } :`}</span>
@@ -235,8 +263,10 @@ function Quiz() {
         </motion.div>
       )}
 
-      <div className="position absolute bottom-0 right-0 p-3 m-5 bg-blue-300 hover:bg-blue-500 rounded-lg">
-        <Link to="/autismtest">Exit Test</Link>
+      <div className="position absolute bottom-0 right-0 p-3 m-5">
+        <Link to="/autismtest">
+          <Button variant="outlined">Exit Test</Button>
+        </Link>
       </div>
     </>
   );

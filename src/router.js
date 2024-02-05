@@ -13,6 +13,8 @@ import FlashCard from "./pages/FlashCard/FlashCard";
 import CardContent from "./pages/FlashCard/CardContent";
 import MiniGame from "./pages/Mini Game/MiniGame";
 import TicTacToe from "./pages/Mini Game/TicTacToe/TicTacToe";
+import TicTacToeMenu from "./pages/Mini Game/TicTacToe/TicTacToeMenu";
+
 import Settings from "./pages/Settings/Settings";
 import Video from "./pages/Video/Video";
 import ErrorPage from "./pages/ErrorPage";
@@ -37,7 +39,8 @@ export const router = createBrowserRouter([
       { path: "/settings", element: <Settings /> },
       { path: "/video", element: <Video /> },
       { path: "/flashcard/:flashCardId", element: <CardContent /> },
-      { path: "/minigame/tictactoe", element: <TicTacToe /> },
+      { path: "/minigame/tictactoe/home", element: <TicTacToeMenu /> },
+      { path: "/minigame/tictactoe/play", element: <TicTacToe /> },
     ],
   },
   {

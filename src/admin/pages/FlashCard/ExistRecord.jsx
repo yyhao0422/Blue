@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import { LoadingButton } from "@mui/lab";
 
 import ExistCardContent from "./ExistCardContent";
 
@@ -285,19 +288,27 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
       {isLoadingGetCategoryData && (
         <tr>
           <td>
-            <p>Fetching the data ...</p>
+            <LoadingButton sx={{ width: 20 }} loading>
+              Loading ...
+            </LoadingButton>
           </td>
         </tr>
       )}
       {!isLoadingGetCategoryData && (
-        <tr>
-          <td className="p-2">{recordData.id}</td>
-          <td className="p-2">{recordData.title}</td>
-          <td className="p-2">
+        <TableRow>
+          <TableCell align="right" className="p-2">
+            {recordData.id}
+          </TableCell>
+          <TableCell align="right" className="p-2">
+            {recordData.title}
+          </TableCell>
+          <TableCell align="right" className="p-2">
             <img src={recordData.imageUrl} className="w-10" />
-          </td>
-          <td className="p-2">{recordData.description}</td>
-          <td className="p-2">
+          </TableCell>
+          <TableCell align="right" className="p-2">
+            {recordData.description}
+          </TableCell>
+          <TableCell align="right" className="p-2">
             <button className="mx-2" onClick={handleEditFlashCard}>
               Edit
             </button>
@@ -306,10 +317,14 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
                 Delete
               </button>
             )}
-            {isDeleteLoading && <p>Loading ...</p>}
-          </td>
+            {isDeleteLoading && (
+              <LoadingButton sx={{ width: 20 }} loading>
+                Loading ...
+              </LoadingButton>
+            )}
+          </TableCell>
           {/* ----------------Edit Dialog ---------------- */}
-        </tr>
+        </TableRow>
       )}
       <dialog ref={editFlashCardDialog} className="p-3 rounded-lg">
         <h1 className="mt-2 mb-4">Flash Card</h1>
