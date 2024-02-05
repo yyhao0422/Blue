@@ -16,9 +16,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { LoadingButton } from "@mui/lab";
 import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
 import ExistRecord from "./ExistRecord";
 import { AdminClerkContext } from "../../../store/admin-clerk-user-context";
-import { Typography } from "@mui/material";
 
 function FlashCard() {
   const [flashCardData, setFlashCardData] = useState({});
@@ -162,9 +162,12 @@ function FlashCard() {
     <>
       <div className=" p-3 h-fit m-3 rounded-md w-screen">
         <div className="flex justify-between">
-          <h1 className="text-xl text-bold text-center m-3">
+          <Typography
+            variant="h3"
+            className="text-xl text-bold text-center m-3"
+          >
             Flash Card Maintainance
-          </h1>
+          </Typography>
           <Button variant="contained" onClick={handleNewFlashCard}>
             New Flashcard
           </Button>
@@ -260,19 +263,6 @@ function FlashCard() {
               fullWidth
               variant="standard"
             />
-            {/* <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-            >
-              Upload Image
-              <VisuallyHiddenInput
-                type="file"
-                accept=".png, .jpg, .jpeg, .gif "
-                required
-                name="upload"
-              />
-            </Button> */}
 
             <div className="flex justify-between items-center">
               <label>

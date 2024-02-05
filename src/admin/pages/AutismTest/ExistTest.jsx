@@ -1,4 +1,9 @@
 import { useEffect, useState, useRef } from "react";
+
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import { LoadingButton } from "@mui/lab";
+
 import { useDeleteTestCategory } from "../../hooks/useFetch";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
@@ -127,19 +132,25 @@ function ExistTest({ id, title, description, setRefresh }) {
 
   return (
     <>
-      <tr>
-        <td className="p-2">{id}</td>
-        <td className="p-2">{title}</td>
-        <td className="p-2">{description}</td>
-        <td>
+      <TableRow>
+        <TableCell align="right" className="p-2">
+          {id}
+        </TableCell>
+        <TableCell align="right" className="p-2">
+          {title}
+        </TableCell>
+        <TableCell align="right" className="p-2">
+          {description}
+        </TableCell>
+        <TableCell align="right">
           <button className="mx-2" onClick={handleClickEditTest}>
             Edit
           </button>
           <button className="mx-2" onClick={() => handleDeleteTest(id)}>
             Delete
           </button>
-        </td>
-      </tr>
+        </TableCell>
+      </TableRow>
       <dialog ref={editAutismTestDialog} className="p-3 rounded-lg">
         <h1 className="mt-2 mb-4">Autism Test</h1>
         <div className="flex justify-around mb-3">
