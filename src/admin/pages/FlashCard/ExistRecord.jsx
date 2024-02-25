@@ -1,6 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, forwardRef } from "react";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import TableContainer from "@mui/material/TableContainer";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { Card, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
 import ExistCardContent from "./ExistCardContent";
@@ -17,8 +34,7 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
   const [statusAddNewContent, setStatusAddNewContent] = useState(null);
   const [updateFlashCardResult, setUpdateFlashCardResult] = useState(null);
   const [error, setError] = useState("");
-
-  const editFlashCardDialog = useRef();
+  const [open, setOpen] = useState(false);
 
   // New Card Content reference hook
   const newContentTitle = useRef();
@@ -60,8 +76,9 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
     setRefreshCardContent((prev) => !prev);
   }
 
-  async function handleNewContent() {
+  async function handleNewContent(e) {
     setIsLoadingAddContent(true);
+    console.log(e);
     const imageFd = new FormData();
     imageFd.append("upload", newImageSrc.current.files[0]);
     imageFd.append("dirname", "Images");
@@ -207,13 +224,15 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
     setIsDeleletLoading(false);
     refreshParentFlashCard();
   }
+
   //Handle Edit Button
   function handleEditFlashCard() {
-    editFlashCardDialog.current.showModal();
+    setOpen(true);
   }
 
   function closeEditFlashCard() {
-    editFlashCardDialog.current.close();
+    setOpen(false);
+    setUpdateFlashCardResult(null);
   }
 
   async function handleEditCardDetail(event) {
@@ -283,6 +302,18 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
     setIsUpdateCardDetail(false);
   }
 
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
   return (
     <>
       {isLoadingGetCategoryData && (
@@ -303,19 +334,25 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
             {recordData.title}
           </TableCell>
           <TableCell align="right" className="p-2">
-            <img src={recordData.imageUrl} className="w-10" />
+            <div className="text-right inline-block">
+              <img
+                src={recordData.imageUrl}
+                alt={recordData.title}
+                className="w-10 my-auto text-right"
+              />
+            </div>
           </TableCell>
           <TableCell align="right" className="p-2">
             {recordData.description}
           </TableCell>
           <TableCell align="right" className="p-2">
-            <button className="mx-2" onClick={handleEditFlashCard}>
+            <Button className="mx-2" onClick={handleEditFlashCard}>
               Edit
-            </button>
+            </Button>
             {!isDeleteLoading && (
-              <button className="mx-2" onClick={handleDeleteFlashCard}>
+              <Button className="mx-2" onClick={handleDeleteFlashCard}>
                 Delete
-              </button>
+              </Button>
             )}
             {isDeleteLoading && (
               <LoadingButton sx={{ width: 20 }} loading>
@@ -326,8 +363,17 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
           {/* ----------------Edit Dialog ---------------- */}
         </TableRow>
       )}
-      <dialog ref={editFlashCardDialog} className="p-3 rounded-lg">
-        <h1 className="mt-2 mb-4">Flash Card</h1>
+      <Dialog
+        fullScreen
+        open={open}
+        onSubmit={handleEditCardDetail}
+        onClose={closeEditFlashCard}
+        maxWidth="xl"
+        PaperProps={{
+          component: "form",
+        }}
+      >
+        <DialogTitle>Flash Card</DialogTitle>
         <div className="flex justify-around mb-3">
           <h1
             className={`${!isEditingContent && "underline"} cursor-pointer`}
@@ -346,54 +392,93 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
             Card Content
           </h1>
         </div>
-        <form method="dialog" onSubmit={handleEditCardDetail}>
+        <DialogContent>
           {/*----------------- Card Detail ------------------------ */}
-          {updateFlashCardResult !== null && <p>{updateFlashCardResult}</p>}
-
+          {updateFlashCardResult !== null && (
+            <Typography className="p-3">{updateFlashCardResult}</Typography>
+          )}
           {!isEditingContent &&
             updateFlashCardResult === null &&
             recordData !== null &&
             !isUpdateCardDetail && (
-              <div className="flex flex-col">
-                <div className="flex justify-between items-center">
-                  <label>Title :</label>
-                  <input
-                    type="text"
-                    name="title"
-                    className="m-2 border"
-                    placeholder={recordData.title}
-                    required
-                  />
-                </div>
-                <div className="flex justify-between items-center">
-                  <label>Alt :</label>
-                  <input
-                    type="text"
-                    name="description"
-                    className="m-2 border"
-                    placeholder={recordData.description}
-                    required
-                  />
-                </div>
-                <div className="flex justify-between items-center">
-                  <label>Image URL :</label>
-                  <img className="w-10" src={recordData.imageUrl} />
-                  <input
-                    type="file"
-                    className="m-2 border"
-                    accept=".png, .jpg, .jpeg, .gif "
-                    required
-                    name="upload"
-                  />
-                </div>
-              </div>
-            )}
-          {/*----------------- Card Content ------------------------ */}
+              <>
+                <DialogContentText>
+                  Please fill the form to edit the current flash card.
+                </DialogContentText>
 
-          {isEditingContent && (
-            <>
-              {/* --------------------------Existing Card Content----------------------- */}
-              <div className="flex flex-col">
+                <TextField
+                  autoFocus
+                  required
+                  margin="dense"
+                  id="title"
+                  name="title"
+                  label="Title"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  placeholder={recordData.title}
+                />
+
+                <TextField
+                  autoFocus
+                  required
+                  margin="dense"
+                  id="description"
+                  name="description"
+                  label="Description"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  placeholder={recordData.description}
+                />
+
+                <div className="flex justify-between items-center">
+                  <label>
+                    <Typography>Image Src :</Typography>
+                    <img
+                      className="w-10"
+                      alt="current pic"
+                      src={recordData.imageUrl}
+                    />
+                  </label>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload Image
+                    <VisuallyHiddenInput
+                      type="file"
+                      accept=".png, .jpg, .jpeg, .gif "
+                      required
+                      name="upload"
+                    />
+                  </Button>
+                </div>
+              </>
+            )}
+        </DialogContent>
+
+        {/*----------------- Card Content ------------------------ */}
+
+        {isEditingContent && (
+          <>
+            {/* --------------------------Existing Card Content----------------------- */}
+            <TableContainer sx={{ padding: 3 }} component={Paper}>
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                className="m-3 "
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="right">ID</TableCell>
+                    <TableCell align="right">Title</TableCell>
+                    <TableCell align="right">Image</TableCell>
+                    <TableCell align="right">Sound Src</TableCell>
+                    <TableCell align="right">Action</TableCell>
+                  </TableRow>
+                </TableHead>
                 {recordData.question?.map((question) => {
                   return (
                     <ExistCardContent
@@ -404,70 +489,94 @@ function ExistRecord({ recordDataId, AdminId, refreshParentFlashCard }) {
                     />
                   );
                 })}
-              </div>
-              {/* ------------------------------New Card Content------------------------------ */}
-              <div className="flex justify-between items-center my-2">
-                <h1 className="mr-3">New Content</h1>
-                <div className="bg-cyan-300 py-1 px-2 rounded-md">
-                  <label htmlFor="title">Content Title :</label>
-                  <input
-                    id="title"
-                    ref={newContentTitle}
-                    type="text"
-                    className="m-2 border"
-                    required
-                  />
-                  <label htmlFor="imageUrl">Image src :</label>
-                  <input
-                    ref={newImageSrc}
-                    id="imageUrl"
-                    type="file"
-                    className="m-2 border"
-                    required
-                  />
-                  <label htmlFor="soundFile">Upload Sound :</label>
-                  <input
-                    ref={newUploadSound}
-                    id="soundFile"
-                    type="file"
-                    accept=".m4a,.mp3,.webm"
-                    className="m-2 border"
-                    required
-                  />
-                </div>
-                <i
-                  className="mx-2 cursor-pointer hover:bg-gray-300 rounded-[50px]"
-                  onClick={handleNewContent}
-                >
-                  <svg
-                    width="40px"
-                    height="40px"
-                    viewBox="0 -0.5 25 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+              </Table>
+            </TableContainer>
+            {/* ------------------------------New Card Content------------------------------ */}
+            <DialogContent sx={{ minHeight: "200px" }}>
+              <DialogTitle className="mr-3">New Content</DialogTitle>
+              <DialogContentText>
+                Please fill the form to create a new flash card content.
+              </DialogContentText>
+              <div className="flex justify-around">
+                <TextField
+                  sx={{ width: "25%", marginRight: " 20px" }}
+                  autoFocus
+                  required
+                  margin="dense"
+                  id="title"
+                  name="title"
+                  label="Title"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                  inputRef={newContentTitle}
+                />
+                <div className="flex justify-between items-center">
+                  <label>
+                    <Typography sx={{ margin: "0 10px 0 10px" }}>
+                      Image Src :
+                    </Typography>
+                  </label>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
                   >
-                    <path
-                      d="M5.5 12.5L10.167 17L19.5 8"
-                      stroke="#000000"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                    Upload Image
+                    <VisuallyHiddenInput
+                      type="file"
+                      accept=".png, .jpg, .jpeg, .gif "
+                      required
+                      name="imageUrl"
+                      ref={newImageSrc}
                     />
-                  </svg>
-                </i>
+                  </Button>
+                </div>
+                <div className="flex justify-between items-center">
+                  <label>
+                    <Typography sx={{ margin: "0 10px 0 10px" }}>
+                      Sound Src :
+                    </Typography>
+                  </label>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    startIcon={<CloudUploadIcon />}
+                  >
+                    Upload Sound
+                    <VisuallyHiddenInput
+                      type="file"
+                      required
+                      name="soundUrl"
+                      ref={newUploadSound}
+                    />
+                  </Button>
+                </div>
+
+                {isLoadingAddContent ? (
+                  <LoadingButton sx={{ width: 20 }} loading>
+                    Loading ...
+                  </LoadingButton>
+                ) : (
+                  <Button variant="outlined" onClick={handleNewContent}>
+                    Create
+                  </Button>
+                )}
               </div>
-            </>
-          )}
-          <div className="flex justify-between m-3">
-            {!isEditingContent &&
-              !isUpdateCardDetail &&
-              updateFlashCardResult === null && <button>Save</button>}
-            <button type="button" onClick={closeEditFlashCard}>
-              Close
-            </button>
-          </div>
-        </form>
-      </dialog>
+            </DialogContent>
+          </>
+        )}
+        <div className="flex justify-between m-3">
+          {!isEditingContent &&
+            !isUpdateCardDetail &&
+            updateFlashCardResult === null && (
+              <Button type="submit">Save</Button>
+            )}
+          <Button type="button" onClick={closeEditFlashCard}>
+            Close
+          </Button>
+        </div>
+      </Dialog>
     </>
   );
 }

@@ -1,7 +1,25 @@
+import { Typography } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import TableContainer from "@mui/material/TableContainer";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { Card } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { useRef, useState } from "react";
 
 function ExistCardContent({ question, refreshFlashCard, AdminId }) {
-  const editDialog = useRef();
   const newContentTitle = useRef();
   const newImageSrc = useRef();
   const newSoundSrc = useRef();
@@ -9,6 +27,7 @@ function ExistCardContent({ question, refreshFlashCard, AdminId }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
 
   console.log(question);
 
@@ -128,97 +147,138 @@ function ExistCardContent({ question, refreshFlashCard, AdminId }) {
   }
 
   function handleEditOpenModal() {
-    editDialog.current.showModal();
+    setOpen(true);
   }
   function handleEditCloseModal() {
-    editDialog.current.close();
+    setOpen(false);
   }
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
 
   return (
     <>
-      <div className="flex justify-between items-center my-2 ">
-        <h1 className="mr-3 whitespace-nowrap">ContentID {question.id} :</h1>
-        <div className="flex w-full border py-2 px-2 rounded-md">
-          <div className="flex items-center mx-2 w-1/3">
-            <label className="text-nowrap">Content Title :</label>
-            <p className="mx-3">{question.question}</p>
-          </div>
-          <div className="flex items-center mx-2 w-1/3">
-            <label className="text-nowrap">Image URL :</label>
-            <img src={question.imageUrl} className="w-10 mx-3" />
-          </div>
-          <div className="flex items-center mx-2 w-1/3">
-            <label className="text-nowrap">Sound Src:</label>
+      <TableBody>
+        <TableRow>
+          <TableCell className="mr-3 whitespace-nowrap">
+            {question.id}
+          </TableCell>
+
+          <TableCell align="right">{question.question}</TableCell>
+          <TableCell align="right">
+            <img src={question.imageUrl} alt="card pic" className="w-10 mx-3" />
+          </TableCell>
+          <TableCell align="right" sx={{ maxWidth: "200px" }}>
             <p className="mx-3 overflow-hidden text-ellipsis">
               {question.soundUrl}
             </p>
-          </div>
-        </div>
-        <button type=" button" className="mx-2" onClick={handleEditOpenModal}>
-          Edit
-        </button>
-        <button
-          type="button"
-          className="
+          </TableCell>
+
+          <TableCell align="right">
+            <Button
+              type=" button"
+              className="mx-2"
+              onClick={handleEditOpenModal}
+            >
+              Edit
+            </Button>
+            <Button
+              type="button"
+              className="
       mx-2"
-          onClick={handleDeleteAction}
-        >
-          Delete
-        </button>
-      </div>
-      <dialog ref={editDialog} className="p-3">
-        <h1 className="text-center">Edit Dialog</h1>
-        <form method="dialog">
-          <div className="flex flex-col justify-between items-center my-2">
-            <div className=" flex flex-col bg-cyan-300 py-1 px-2 rounded-md">
-              <div>
-                <label htmlFor="title">Content Title :</label>
+              onClick={handleDeleteAction}
+            >
+              Delete
+            </Button>
+          </TableCell>
+        </TableRow>
+      </TableBody>
 
-                <input
-                  id="title"
-                  name="title"
-                  placeholder={question.question}
-                  ref={newContentTitle}
-                  type="text"
-                  className="m-2 border"
-                  required
-                />
-              </div>
+      <Dialog
+        open={open}
+        className="p-3"
+        onSubmit={handleEditContent}
+        onClose={handleEditCloseModal}
+        PaperProps={{
+          component: "form",
+        }}
+      >
+        <DialogTitle className="text-center">Edit Dialog</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please fill the form to create a edit flash card.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="title"
+            name="title"
+            label="Content Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            placeholder={question.question}
+            inputRef={newContentTitle}
+          />
 
-              <div>
-                <label htmlFor="imageUrl">Image src :</label>
-                <input
-                  id="imageUrl"
-                  name="imageurl"
-                  ref={newImageSrc}
-                  type="file"
-                  className="m-2 border"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="soundFile">Upload Sound :</label>
-                <input
-                  id="soundFile"
-                  name="soundFile"
-                  ref={newSoundSrc}
-                  type="file"
-                  accept=".m4a,.mp3,.webm"
-                  className="m-2 border"
-                  required
-                />
-              </div>
-            </div>
-            <button type="button" onClick={handleEditContent}>
-              Save
-            </button>
-            <button type="button" onClick={handleEditCloseModal}>
-              Close
-            </button>
+          <div className="flex justify-between items-center mt-10 mb-10">
+            <label>
+              <Typography>Image Src :</Typography>
+            </label>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload Image
+              <VisuallyHiddenInput
+                type="file"
+                accept=".png, .jpg, .jpeg, .gif "
+                required
+                name="imageurl"
+                id="imageUrl"
+                ref={newImageSrc}
+              />
+            </Button>
           </div>
-        </form>
-      </dialog>
+          <div className="flex justify-between items-center mb-10">
+            <label>
+              <Typography>Sound Src :</Typography>
+            </label>
+            <Button
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+            >
+              Upload Image
+              <VisuallyHiddenInput
+                type="file"
+                accept=".m4a,.mp3,.webm"
+                required
+                name="soundFile"
+                id="soundFile"
+                ref={newSoundSrc}
+              />
+            </Button>
+          </div>
+
+          <DialogActions>
+            <Button type="submit">Save</Button>
+            <Button type="button" onClick={handleEditCloseModal}>
+              Close
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -14,9 +14,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { LoadingButton } from "@mui/lab";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import ExistRecord from "./ExistRecord";
 import { AdminClerkContext } from "../../../store/admin-clerk-user-context";
 
@@ -292,10 +292,10 @@ function FlashCard() {
           </DialogContent>
         )}
         {newFlashCardResult !== "" && (
-          <div>
-            <p>{newFlashCardResult}</p>
-            <button onClick={closeNewFlashCard}>Close</button>
-          </div>
+          <Card className="w-96 p-3 ">
+            <Typography className="mb-10">{newFlashCardResult}</Typography>
+            <Button onClick={closeNewFlashCard}>Close</Button>
+          </Card>
         )}
       </Dialog>
     </>
