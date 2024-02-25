@@ -6,6 +6,7 @@ body {
   margin: 0;
   font-family: "PoppinsMedium";
   height: 100vh;
+  width: 100vw;
 }
 
 @font-face {
