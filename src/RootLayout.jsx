@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
               <SidebarItem icon={videoIcon} text="Video" />
               <SidebarItem icon={cardIcon} text="Flash Card" />
               <SidebarItem icon={gameIcon} text="Mini Game" />
-              <SidebarItem icon={testIcon} text="Autism Test" alert />
+              <SidebarItem icon={testIcon} text="Autism Test" />
               <SidebarItem icon={chatIcon} text="AI Chat" />
               <hr className="my-3" />
               <SidebarItem icon={settingIcon} text="Settings" />

@@ -1,4 +1,4 @@
-import { useContext, useState, createContext } from "react";
+import { useContext, useState, createContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react";
 import { UserButton, useUser, SignInButton } from "@clerk/clerk-react";
@@ -11,15 +11,33 @@ const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
   const [isExpended, setIsExpended] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   const { isSignedIn, user, isLoaded } = useUser();
+
+  useEffect(() => {
+    const checkCursorPos = (e) => {
+      const windowWidth = window.innerWidth;
+      const cursorPosition = e.clientX;
+
+      if (cursorPosition < windowWidth / 2) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    document.addEventListener("mousemove", checkCursorPos);
+    return () => {
+      document.removeEventListener("mousemove", checkCursorPos);
+    };
+  }, []);
 
   return (
     <aside
       onMouseEnter={() => setIsExpended(true)}
       onMouseLeave={() => setIsExpended(false)}
       className={`h-screen sticky top-0 transition-all duration-500  ${
-        isExpended ? "w-[300px]" : "w-[90px]"
+        isExpended ? "w-[300px]" : isVisible ? "w-[90px]" : "w-[0px]"
       }`}
     >
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
@@ -92,6 +110,24 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
   const { isExpended, setIsExpended } = useContext(SidebarContext);
   const linkText = text.toLowerCase().replaceAll(" ", "");
 
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    const checkCursorPos = (e) => {
+      const windowWidth = window.innerWidth;
+      const cursorPosition = e.clientX;
+
+      if (cursorPosition < windowWidth / 2) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    document.addEventListener("mousemove", checkCursorPos);
+    return () => {
+      document.removeEventListener("mousemove", checkCursorPos);
+    };
+  }, []);
+
   return (
     <NavLink
       to={
@@ -99,7 +135,9 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
           ? `${isAdmin === true ? "/admin" : ""}/`
           : linkText
       }
-      className={({ isActive }) => (isActive ? "activeNavLink" : undefined)}
+      className={({ isActive }) =>
+        isActive && isVisible ? "activeNavLink" : undefined
+      }
       end
     >
       <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600">
