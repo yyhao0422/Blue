@@ -14,7 +14,7 @@ export default function Video() {
   const { isSignedIn, user } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [currentSelectedCarousel, setCurrentSelectedCarousel] = useState(0);
-  const [selectedCategoryId, _setSelectedCategoryId] = useState(0);
+  const [selectedCategoryId, _setSelectedCategoryId] = useState(1);
   const setSelectedCategoryId = (value) => {
     _setSelectedCategoryId(value);
     selectedCategoryId$.next(value);
@@ -56,7 +56,6 @@ export default function Video() {
     };
 
     const apiSub = forkJoin([fetchVidCategories(), fetchVideos()]).subscribe(([vidCategoryRes, vidRes]) => {
-      console.log(vidCategoryRes, vidRes)
       setVideoCategories(vidCategoryRes.data);
       setVideos(vidRes.data);
       setLatestVideos(_.first(vidRes.data, 3));
