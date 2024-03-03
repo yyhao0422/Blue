@@ -126,7 +126,7 @@ export default function Video() {
               <div className="text-3xl text-white text-right line-clamp-1 w-[700px]">{latestVideos[currentSelectedCarousel].title}</div>
             </div>
             <ArrowCircleLeftIcon className="text-white !text-7xl mr-[-30px] z-10 cursor-pointer" onClick={onLeftCarouselClick} />
-            <img className="h-[400px]" src={getThumbnail(latestVideos[currentSelectedCarousel].videoUrl)} alt={latestVideos[currentSelectedCarousel].title} />
+            <img className="h-[400px] cursor-pointer" src={getThumbnail(latestVideos[currentSelectedCarousel].videoUrl)} alt={latestVideos[currentSelectedCarousel].title} onClick={() => onPlayBtnClick(latestVideos[currentSelectedCarousel].videoUrl)} />
             <ArrowCircleRightIcon className="text-white !text-7xl ml-[-30px] z-10 cursor-pointer" onClick={onRightCarouselClick} />
           </div>
           <div className="flex items-center justify-end gap-x-5 mr-10">
