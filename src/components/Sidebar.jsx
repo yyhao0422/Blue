@@ -18,18 +18,16 @@ export default function Sidebar({ children }) {
     <aside
       onMouseEnter={() => setIsExpended(true)}
       onMouseLeave={() => setIsExpended(false)}
-      className={`h-screen sticky top-0 transition-all duration-500  ${
-        isExpended ? "w-[300px]" : "w-[90px]"
-      }`}
+      className={`h-screen sticky top-0 transition-all duration-500  ${isExpended ? "w-[300px]" : "w-[90px]"
+        }`}
     >
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+      <nav className="h-full flex flex-col bg-slate-600 border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           {/* Blue Logo */}
           <img
             src={blueLogo}
-            className={`overflow-hidden transition-all duration-500 pb-4 ${
-              isExpended ? "w-48" : "w-0"
-            }`}
+            className={`overflow-hidden transition-all duration-500 pb-4 ${isExpended ? "w-48" : "w-0"
+              }`}
             alt=""
           />
           {/* Expend Button */}
@@ -44,9 +42,8 @@ export default function Sidebar({ children }) {
         {/* Wrapping the Children here! */}
         <SidebarContext.Provider value={{ isExpended, setIsExpended }}>
           <ul
-            className={`flex flex-col mx-3 h-min mb-auto ${
-              !isExpended ? "mt-[30px]" : ""
-            }`}
+            className={`flex flex-col mx-3 h-min mb-auto ${!isExpended ? "mt-[30px]" : ""
+              }`}
           >
             {children}
           </ul>
@@ -68,9 +65,8 @@ export default function Sidebar({ children }) {
 
           {isSignedIn && (
             <div
-              className={`flex justify-between items-center overflow-hidden transition-all duration-500 ${
-                isExpended ? "w-52 ml-3" : "w-0"
-              }`}
+              className={`flex justify-between items-center overflow-hidden transition-all duration-500 ${isExpended ? "w-52 ml-3" : "w-0"
+                }`}
             >
               <div className="leading-4">
                 <h4 className="font-semibold">{user.fullName}</h4>
@@ -102,20 +98,18 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
       className={({ isActive }) => (isActive ? "activeNavLink" : undefined)}
       end
     >
-      <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600">
+      <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-white hover:text-indigo-800">
         {icon}
         <span
-          className={`overflow-hidden transition-all  ${
-            isExpended ? "w-52 ml-3" : " w-0"
-          }`}
+          className={`overflow-hidden transition-all  ${isExpended ? "w-52 ml-3" : " w-0"
+            }`}
         >
           <p className={`text-nowrap ${isExpended ? "" : "hidden"}`}> {text}</p>
         </span>
         {alert && (
           <div
-            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
-              isExpended ? "" : "top-2"
-            }`}
+            className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${isExpended ? "" : "top-2"
+              }`}
           ></div>
         )}
 
