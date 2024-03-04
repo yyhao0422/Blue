@@ -29,6 +29,12 @@ function TicTacToeMenu() {
           Tic Tac Toe - Rules
         </Typography>
         <hr className="bg-black h-[3px] " />
+        <iframe key="vid-1"
+          title="Tic Tac Toe"
+          width="500"
+          height="300"
+          src="https://www.youtube.com/embed/ZBZcnImNmhk"
+          allowFullScreen />
       </Card>
     </motion.div>
   );

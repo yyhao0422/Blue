@@ -40,7 +40,7 @@ export default function Sidebar({ children }) {
         isExpended ? "w-[300px]" : isVisible ? "w-[100px]" : "w-[0px]"
       }`}
     >
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+      <nav className="h-full flex flex-col bg-slate-600 border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           {/* Blue Logo */}
           <img
@@ -140,7 +140,7 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
       }
       end
     >
-      <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-gray-600">
+      <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 text-white hover:text-indigo-800">
         {icon}
         <span
           className={`overflow-hidden transition-all  ${
