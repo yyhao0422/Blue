@@ -14,7 +14,7 @@ export default function Video() {
   const { isSignedIn, user } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const [currentSelectedCarousel, setCurrentSelectedCarousel] = useState(0);
-  const [selectedCategoryId, _setSelectedCategoryId] = useState(1);
+  const [selectedCategoryId, _setSelectedCategoryId] = useState(0);
   const setSelectedCategoryId = (value) => {
     _setSelectedCategoryId(value);
     selectedCategoryId$.next(value);
@@ -26,7 +26,7 @@ export default function Video() {
     searchTitle$.next(value);
   }
 
-  const selectedCategoryId$ = useRef(new BehaviorSubject(null)).current;
+  const selectedCategoryId$ = useRef(new BehaviorSubject(0)).current;
   const searchTitle$ = useRef(new BehaviorSubject("")).current;
 
   const [videoCategories, setVideoCategories] = useState([]);
@@ -34,54 +34,56 @@ export default function Video() {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-      ClerkId: user.id,
-    };
+    if (isSignedIn) {
+      const headers = {
+        "Content-Type": "application/json",
+        ClerkId: user.id,
+      };
 
-    const fetchVidCategories = () => {
-      return from(
-        fetch("https://api.alexsama.tech/api/video-category", {
-          headers
-        }).then(res => res.json())
-      );
-    }
+      const fetchVidCategories = () => {
+        return from(
+          fetch("https://api.alexsama.tech/api/video-category", {
+            headers
+          }).then(res => res.json())
+        );
+      }
 
-    const fetchVideos = () => {
-      return from(
-        fetch("https://api.alexsama.tech/api/video", {
-          headers
-        }).then(res => res.json())
-      );
-    };
+      const fetchVideos = () => {
+        return from(
+          fetch("https://api.alexsama.tech/api/video", {
+            headers
+          }).then(res => res.json())
+        );
+      };
 
-    const apiSub = forkJoin([fetchVidCategories(), fetchVideos()]).subscribe(([vidCategoryRes, vidRes]) => {
-      setVideoCategories(vidCategoryRes.data);
-      setVideos(vidRes.data);
-      setLatestVideos(_.first(vidRes.data, 3));
-      setIsLoading(false);
-    })
+      const apiSub = forkJoin([fetchVidCategories(), fetchVideos()]).subscribe(([vidCategoryRes, vidRes]) => {
+        setVideoCategories(vidCategoryRes.data);
+        setVideos(vidRes.data);
+        setLatestVideos(_.first(vidRes.data, 3));
+        setIsLoading(false);
+      })
 
-    const querySub = combineLatest([selectedCategoryId$, searchTitle$])
-      .pipe(
-        debounceTime(800),
-        switchMap(([categoryId, title]) =>
-          fetchVideos().pipe(
-            map(res => res.data.filter(video =>
-              (categoryId === 0 || video.videoCategoryId === categoryId) &&
-              (title === '' || video.title === title)
-            ))
+      const querySub = combineLatest([selectedCategoryId$, searchTitle$])
+        .pipe(
+          debounceTime(800),
+          switchMap(([categoryId, title]) =>
+            fetchVideos().pipe(
+              map(res => res.data.filter(video =>
+                (categoryId === 0 || video.videoCategoryId === categoryId) &&
+                (title === '' || video.title.toLowerCase().includes(title.toLowerCase()))
+              ))
+            )
           )
-        )
-      ).subscribe(videos => {
-        setVideos(videos)
-      });
+        ).subscribe(videos => {
+          setVideos(videos)
+        });
 
-    return () => {
-      apiSub.unsubscribe();
-      querySub.unsubscribe();
+      return () => {
+        apiSub.unsubscribe();
+        querySub.unsubscribe();
+      }
     }
-  }, [user, searchTitle$, selectedCategoryId$]);
+  }, [isSignedIn, user, searchTitle$, selectedCategoryId$]);
 
   const getThumbnail = (youtubeUrl) => {
     const videoId = youtubeUrl.split("v=")[1];
@@ -173,20 +175,3 @@ export default function Video() {
     )
   );
 }
-
-const testimonials = [
-  {
-    quote:
-      "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
-    name: "Charles Dickens",
-    title: "A Tale of Two Cities",
-  },
-  {
-    quote:
-      "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
-    name: "William Shakespeare",
-    title: "Hamlet",
-  }
-];
-
-const tests = [1, 2, 3, 4, 5]
