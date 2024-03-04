@@ -63,7 +63,6 @@ export default function AdminLayout({ children }) {
         <AdminClerkContext.Provider value={{ user: user, isAdmin: isAdmin }}>
           <main className="flex">
             <Sidebar>
-              <SidebarItem icon={homeIcon} text="Home" isAdmin={true} />
               <SidebarItem icon={videoIcon} text="Video" isAdmin={true} />
               <SidebarItem icon={cardIcon} text="Flash Card" isAdmin={true} />
               <SidebarItem

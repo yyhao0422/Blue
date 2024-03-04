@@ -37,7 +37,7 @@ export default function Sidebar({ children }) {
       onMouseEnter={() => setIsExpended(true)}
       onMouseLeave={() => setIsExpended(false)}
       className={`h-screen sticky top-0 transition-all duration-500  ${
-        isExpended ? "w-[300px]" : isVisible ? "w-[90px]" : "w-[0px]"
+        isExpended ? "w-[300px]" : isVisible ? "w-[100px]" : "w-[0px]"
       }`}
     >
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">

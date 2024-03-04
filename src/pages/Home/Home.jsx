@@ -153,8 +153,6 @@ export default function Home() {
             Swap left to sign up or login ! See you on the other side.
           </p>
         </div>
-
-        <Footer />
       </div>
     </div>
   );
