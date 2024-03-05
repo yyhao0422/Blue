@@ -127,11 +127,11 @@ export default function CardContent() {
   return (
     <Fragment>
       {isLoading ? (
-        <div className="flex h-screen w-full justify-center items-center">
+        <div className="flex h-screen w-full justify-center items-center dark:bg-slate-800">
           <img src={loader} alt="loading.gif" height="100" width="100" />
         </div>
       ) : (
-        <div className="flex justify-center w-full items-center">
+        <div className="flex justify-center w-full items-center dark:bg-slate-800">
           <motion.div
             className="flex-col space-y-5"
             initial={{ opacity: 0 }}
@@ -159,16 +159,14 @@ export default function CardContent() {
                       alt="card content"
                     />
                     <span
-                      className={`block text-center text-xl ease-in-out transition-all duration-500 ${
-                        isReveal ? "scale-125 translate-y-10 " : ""
-                      } `}
+                      className={`block text-center text-xl ease-in-out transition-all duration-500 ${isReveal ? "scale-125 translate-y-10 " : ""
+                        } `}
                     >
                       {isReveal ? currentCard.question : <QuizIcon />}
                     </span>
                     <div
-                      className={`flex ease-in-out transition-all duration-500 justify-center ${
-                        isReveal ? "translate-y-20" : ""
-                      }`}
+                      className={`flex ease-in-out transition-all duration-500 justify-center ${isReveal ? "translate-y-20" : ""
+                        }`}
                     >
                       <Button
                         variant="contained"

@@ -118,7 +118,7 @@ export default function Video() {
   return (
     isSignedIn ? (
       !isLoading ? (
-        <div className="flex flex-col upper-part bg-gradient-to-b bg-gradient-to-b from-black via-slate-800 to-black w-full gap-5">
+        <div className="flex flex-col upper-part bg-gradient-to-b bg-slate-300 w-full gap-5">
           <div className="bg-red-600 text-white text-right px-10">
             Viewer discretion is advised; it is recommended that you watch this content under the supervision of a guardian.
           </div>
