@@ -160,10 +160,11 @@ export default function Home() {
 
 export const users = [
   {
-    name: "Manu Arora",
-    designation: "Founder, Algochurn",
-    image: "https://picsum.photos/id/10/300/300",
-    badge: "Mentor",
+    name: "Animal",
+    designation: "Wildlife Photographer",
+    image:
+      "https://th.bing.com/th/id/OIP.2s5ozWcnfWH-uVmfw0KSgwHaGt?rs=1&pid=ImgDetMain",
+    badge: "Nature",
   },
   {
     name: "Sarah Singh",
