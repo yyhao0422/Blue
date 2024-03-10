@@ -114,51 +114,56 @@ export default function Badge() {
 
     return (
         <Fragment>
-            <div className="flex flex-col pt-5 w-full">
-                <div className="text-5xl text-center text-white">REWARDS (AVAILABLE POINTS: {userPoints})</div>
-                <div className="grid grid-cols-4 gap-5 p-10 w-full">
-                    {
-                        badges.map((badge, idx) => (
-                            unlockedBadgeIds.includes(badge.id) ?
-                                (
-                                    <div className="h-[600px] bg-white border-[40px] border-red-500" key={`badge-${idx}`}>
-                                        <div className="flex justify-between items-center mt-[-40px] h-[40px]">
-                                            <div className="text-white font-bold text-xl w-[200px] text-ellipsis whitespace-nowrap overflow-hidden">PIZZA BOI</div>
-                                            <div className="flex gap-3 text-white">
-                                                {
-                                                    _.times(badge.starCount, (i) => (
-                                                        <FontAwesomeIcon icon={faStar} key={`star-${i}`} />
-                                                    ))
-                                                }
-                                            </div>
-                                        </div>
-                                        <div className="inner-card-content flex flex-col items-center border border-black h-full w-full bg-gray-100">
-                                            <img src={badge.imageUrl}
-                                                alt={badge.title}
-                                                className="h-[300px] w-full" />
-                                            <div className="flex justify-between p-3 w-full text-xl text-white bg-red-400">
-                                                <span>{badge.title}</span>
-                                                <div className="flex items-center px-5 border border-white bg-red-500">
-                                                    {badge.rarity}
+            {
+                isSignedIn ? (
+                    <div className="flex flex-col pt-5 w-full">
+                        <div className="text-5xl text-center text-white">REWARDS (AVAILABLE POINTS: {userPoints})</div>
+                        <div className="grid grid-cols-4 gap-5 p-10 w-full">
+                            {
+                                badges.map((badge, idx) => (
+                                    unlockedBadgeIds.includes(badge.id) ?
+                                        (
+                                            <div className="h-[600px] bg-white border-[40px] border-red-500" key={`badge-${idx}`}>
+                                                <div className="flex justify-between items-center mt-[-40px] h-[40px]">
+                                                    <div className="text-white font-bold text-xl w-[200px] text-ellipsis whitespace-nowrap overflow-hidden">PIZZA BOI</div>
+                                                    <div className="flex gap-3 text-white">
+                                                        {
+                                                            _.times(badge.starCount, (i) => (
+                                                                <FontAwesomeIcon icon={faStar} key={`star-${i}`} />
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div className="inner-card-content flex flex-col items-center border border-black h-full w-full bg-gray-100">
+                                                    <img src={badge.imageUrl}
+                                                        alt={badge.title}
+                                                        className="h-[300px] w-full" />
+                                                    <div className="flex justify-between p-3 w-full text-xl text-white bg-red-400">
+                                                        <span>{badge.title}</span>
+                                                        <div className="flex items-center px-5 border border-white bg-red-500">
+                                                            {badge.rarity}
+                                                        </div>
+                                                    </div>
+                                                    <div className="grow w-full text-sm p-3 leading-4 overflow-hidden bg-yellow-100">
+                                                        {badge.description}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="grow w-full text-sm p-3 leading-4 overflow-hidden bg-yellow-100">
-                                                {badge.description}
+                                        ) :
+                                        (
+                                            <div key={`badge-${idx}`} className="flex flex-col gap-5 justify-center items-center h-[600px] bg-black text-white border-4 border-white">
+                                                <span className="text-5xl">???</span>
+                                                <button onClick={() => unlockBadge(badge.id)} className="p-5 border border-white">UNLOCK NOW</button>
+                                                <span className="text-center text-white">POINTERS NEEDED: 5</span>
                                             </div>
-                                        </div>
-                                    </div>
-                                ) :
-                                (
-                                    <div key={`badge-${idx}`} className="flex flex-col gap-5 justify-center items-center h-[600px] bg-black text-white border-4 border-white">
-                                        <span className="text-5xl">???</span>
-                                        <button onClick={() => unlockBadge(badge.id)} className="p-5 border border-white">UNLOCK NOW</button>
-                                        <span className="text-center text-white">POINTERS NEEDED: 5</span>
-                                    </div>
-                                )
-                        ))
-                    }
-                </div>
-            </div>
+                                        )
+                                ))
+                            }
+                        </div>
+                    </div>
+                ) : <div>Please login to continue</div>
+
+            }
             <Confetti active={dialogOpen} />
             <Dialog open={errorDialogOpen}>
                 <div className="h-[450px] w-[500px] flex flex-col items-center gap-10">
@@ -190,7 +195,7 @@ export default function Badge() {
                                 </div>
                                 <div className="inner-card-content flex flex-col items-center border border-black h-full w-full bg-gray-100">
                                     <img src={selectedBadge.imageUrl}
-                                        alt="gigachad.png"
+                                        alt={selectedBadge.title}
                                         className="h-[300px] w-full" />
                                     <div className="flex justify-between p-3 w-full text-xl text-white bg-red-400">
                                         <span>{selectedBadge.title}</span>
