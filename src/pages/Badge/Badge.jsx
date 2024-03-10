@@ -14,7 +14,7 @@ export default function Badge() {
     const [selectedBadgeIdToUnlock, setSelectedBadgeIdToUnlock] = useState(0);
     const [unlockedBadgeIds, setUnlockedBadgeIds] = useState([]);
     const [errorDialogOpen, setErrorDialogOpen] = useState(false);
-    const [loadingDialogOpen, setLoadingDialogOpen] = useState(true);
+    const [loadingDialogOpen, setLoadingDialogOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const unlockBadge = (badgeId) => {
@@ -67,6 +67,7 @@ export default function Badge() {
 
     useEffect(() => {
         if (isSignedIn) {
+            setLoadingDialogOpen(true);
             const headers = {
                 "Content-Type": "application/json",
                 ClerkId: user.id,
