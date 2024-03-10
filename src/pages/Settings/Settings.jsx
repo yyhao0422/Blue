@@ -22,7 +22,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="m-20">
+    <div className="p-20 bg-white">
       <h1 className="">Personal Information</h1>
       <hr />
       <div className="flex items-center  my-10">
