@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./TicTacToe.css";
+
+import {
+  EarnPointFunction,
+  fetchUserDetailAndAddPoint,
+} from "../../../components/EarnPointFunction";
+
+import { useUser } from "@clerk/clerk-react";
 
 import Player from "./TicTacToeComponent/Player";
 import GameBoard from "./TicTacToeComponent/GameBoard";
@@ -66,11 +73,18 @@ function deriveWinner(gameBoard, players) {
 function TicTacToe() {
   const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
+  const { user } = useUser();
+  console.log(user);
 
   const activePlayer = deriveActivePlayer(gameTurns);
   const gameBoard = deriveGameBoard(gameTurns);
   const winner = deriveWinner(gameBoard, players);
   const hasDraw = gameTurns.length === 9 && !winner;
+  useEffect(() => {
+    if (winner || hasDraw) {
+      fetchUserDetailAndAddPoint(user);
+    }
+  }, [winner, hasDraw, user]);
 
   function handleSelectSquare(rowIndex, colIndex) {
     setGameTurns((prevTurns) => {
@@ -117,7 +131,10 @@ function TicTacToe() {
           />
         </ol>
         {(winner || hasDraw) && (
-          <GameOver winner={winner} onRestart={handleRestart} />
+          <>
+            <GameOver winner={winner} onRestart={handleRestart} />
+            <EarnPointFunction />
+          </>
         )}
         <GameBoard
           onSelectSquare={handleSelectSquare}

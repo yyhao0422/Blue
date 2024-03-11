@@ -99,7 +99,7 @@ export const Header = () => {
         <br />
         Express Learning Experience
       </h1>
-      <p className="max-w-2xl text-base md:text-xl mt-8 dark:text-neutral-200">
+      <p className="max-w-2xl text-base md:text-xl mt-8 ">
         We aim for building a wonderful plateform for autism studies. User
         experience is the key to our success. We are here to provide the best
         learning experience for the children with autism.

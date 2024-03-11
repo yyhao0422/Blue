@@ -19,6 +19,10 @@ export default function Settings() {
     if (html) {
       html.classList.toggle("dark");
     }
+    localStorage.setItem(
+      "theme",
+      html?.classList.contains("dark") ? "dark" : "light"
+    );
   }
 
   return (

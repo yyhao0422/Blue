@@ -12,15 +12,22 @@ import { Button } from "@mui/material";
 
 import ErrorMessage from "../../components/ErrorMessage";
 import { ClerkContext } from "../../store/clerk-user-context";
+import {
+  EarnPointFunction,
+  fetchUserDetailAndAddPoint,
+} from "../../components/EarnPointFunction";
+import { useUser } from "@clerk/clerk-react";
 
 export default function CardContent() {
   const clerkCtx = useContext(ClerkContext).user;
+
   const { flashCardId } = useParams();
   const [flashCardContent, setFlashCardContent] = useState({});
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isRotate, setIsRotate] = useState(false);
   const [isReveal, setIsReveal] = useState(false);
+  const [earnPoint, setEarnPoint] = useState(false);
 
   const [activeFlashCardIndex, setActiveFlashCardIndex] = useState(0);
 
@@ -126,6 +133,7 @@ export default function CardContent() {
 
   return (
     <Fragment>
+      {earnPoint && <EarnPointFunction />}
       {isLoading ? (
         <div className="flex h-screen w-full justify-center items-center">
           <img src={loader} alt="loading.gif" height="100" width="100" />
@@ -175,6 +183,11 @@ export default function CardContent() {
                         onClick={() => {
                           if (!isReveal) {
                             playAudio(currentCard.soundUrl);
+                            setEarnPoint(true);
+                            fetchUserDetailAndAddPoint(clerkCtx);
+                            setTimeout(() => {
+                              setEarnPoint(false);
+                            }, 5000);
                           }
                           setIsReveal((prev) => !prev);
                         }}

@@ -4,7 +4,7 @@ import Home from "./pages/Home/Home";
 import AdminHome from "./admin/pages/Home";
 import AdminFlashCard from "./admin/pages/FlashCard/FlashCard";
 import AdminAutismTest from "./admin/pages/AutismTest/AutismTest";
-import AdminVideo from "./admin/pages/Video";
+import AdminVideo from "./admin/pages/Video/Video";
 import RootLayout from "./RootLayout";
 import AiChat from "./pages/AiChat/AiChat";
 import AutismTest from "./pages/AutismTest/AutismTest";
@@ -20,6 +20,7 @@ import Video from "./pages/Video/Video";
 import ErrorPage from "./pages/ErrorPage";
 
 import AdminLayout from "./AdminLayout";
+import Dashboard from "./admin/pages/Dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
       { path: "flashcard", element: <AdminFlashCard /> },
       { path: "autismtest", element: <AdminAutismTest /> },
       { path: "video", element: <AdminVideo /> },
+      { path: "dashboard", element: <Dashboard /> },
     ],
   },
 ]);
