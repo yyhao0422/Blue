@@ -64,9 +64,7 @@ export default function AutismTest() {
       )}
 
       {isLoading && (
-        <div className="postion absolute left-[700px] top-[300px]">
-          <img src={loader} alt="loading.gif" height="100" width="100" />
-        </div>
+        <img src={loader} alt="loading.gif" height="100" width="100" />
       )}
 
       <motion.div
