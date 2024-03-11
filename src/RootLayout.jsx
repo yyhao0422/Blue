@@ -65,6 +65,7 @@ export default function RootLayout({ children }) {
               <SidebarItem icon={homeIcon} text="Home" />
               <SidebarItem icon={videoIcon} text="Video" />
               <SidebarItem icon={cardIcon} text="Flash Card" />
+              <SidebarItem icon={cardIcon} text="Rewards" />
               <SidebarItem icon={gameIcon} text="Mini Game" />
               <SidebarItem icon={testIcon} text="Autism Test" />
               <SidebarItem icon={chatIcon} text="AI Chat" />
@@ -72,7 +73,9 @@ export default function RootLayout({ children }) {
               <SidebarItem icon={settingIcon} text="Settings" />
             </Sidebar>
 
-            <Outlet />
+            <div className="flex justify-center items-center bg-indigo-300 dark:bg-slate-800 w-full">
+              <Outlet />
+            </div>
             {children}
           </main>
         </ClerkContext.Provider>

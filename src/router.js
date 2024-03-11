@@ -21,6 +21,7 @@ import ErrorPage from "./pages/ErrorPage";
 
 import AdminLayout from "./AdminLayout";
 import Dashboard from "./admin/pages/Dashboard/Dashboard";
+import Badge from "./pages/Badge/Badge";
 
 export const router = createBrowserRouter([
   {
@@ -32,10 +33,8 @@ export const router = createBrowserRouter([
       { path: "/aichat", element: <AiChat /> },
       { path: "/autismtest", element: <AutismTest /> },
       { path: "/autismtest/:testId", element: <Quiz /> },
-      {
-        path: "/flashcard",
-        element: <FlashCard />,
-      },
+      { path: "/flashcard", element: <FlashCard /> },
+      { path: "/rewards", element: <Badge /> },
       { path: "/minigame", element: <MiniGame /> },
       { path: "/settings", element: <Settings /> },
       { path: "/video", element: <Video /> },
