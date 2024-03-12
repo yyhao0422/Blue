@@ -21,94 +21,94 @@ export default function Home() {
       <HeroParallex
         products={[
           {
-            title: "Moonbeam",
-            link: "https://gomoonbeam.com",
+            title: "Badge",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/moonbeam.png",
+              "https://api.alexsama.tech/storage/Images/WeGFPfEk1XR7k2X9XRHtaUgs8T96vszZQN51qU2A.png",
           },
           {
-            title: "Cursor",
-            link: "https://cursor.so",
+            title: "Flash Card",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/cursor.png",
+              "https://api.alexsama.tech/storage/Images/wZzmvgdMqg6hEo3f8DLR2PiizKTkhpLJpBkNPN3v.png",
           },
           {
-            title: "Rogue",
-            link: "https://userogue.com",
+            title: "Video",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/rogue.png",
+              "https://api.alexsama.tech/storage/Images/trTbtOBNNbNgj8zCmMpqtL7fVlqdZSPp6j78V9dS.png",
           },
           {
-            title: "Editorially",
-            link: "https://editorially.org",
+            title: "Flash Card",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/editorially.png",
+              "https://api.alexsama.tech/storage/Images/6Jo6fmyk6QRXprUpL47zP8VOztZ86HCYSzROPafE.png",
           },
           {
-            title: "Editrix AI",
-            link: "https://editrix.ai",
+            title: "Badge",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/editrix.png",
+              "https://api.alexsama.tech/storage/Images/CGmeh0RllOF7trzwx2c9BFKJmRIjfAvsH81p6GVv.png",
           },
           {
-            title: "Pixel Perfect",
-            link: "https://app.pixelperfect.quest",
+            title: "Mini Game",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/pixelperfect.png",
+              "https://api.alexsama.tech/storage/Images/AAtKaV5QlhEwdz7iGb7ZV4aRJILZPgcwbBPsuSiv.pngg",
           },
           {
-            title: "Algochurn",
-            link: "https://algochurn.com",
+            title: "Flash Card",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/algochurn.png",
+              "https://api.alexsama.tech/storage/Images/NbrgxbUO4yTrJ4ECSPiz3ciJNUAg5jDvLsxtsoP1.png",
           },
           {
             title: "Aceternity UI",
-            link: "https://ui.aceternity.com",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/aceternityui.png",
+              "https://api.alexsama.tech/storage/Images/rrEdRYW6c2x1EDyexYZjNKuehjzFmWetS5RjGiqx.png",
           },
           {
-            title: "Tailwind Master Kit",
-            link: "https://tailwindmasterkit.com",
+            title: "Tic Tac Toe",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/tailwindmasterkit.png",
+              "https://api.alexsama.tech/storage/Images/DDjyvkOE3xrcL99CcOaR6pPJknxG1iJRf78ivVxj.png",
           },
           {
-            title: "SmartBridge",
-            link: "https://smartbridgetech.com",
+            title: "Tic Tac Toe",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/smartbridge.png",
+              "https://api.alexsama.tech/storage/Images/BIDu5QZXvWz7gIAXJiENuV65iksHVyhMF9ic020B.png",
           },
           {
-            title: "Renderwork Studio",
-            link: "https://renderwork.studio",
+            title: "Ai Chatbot",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/renderwork.png",
+              "https://api.alexsama.tech/storage/Images/A98KPHqERej8FOG9Tygh4sr4WJFOhyxVOEGQJBa8.png",
           },
           {
-            title: "Creme Digital",
-            link: "https://cremedigital.com",
+            title: "Feedback",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/cremedigital.png",
+              "https://api.alexsama.tech/storage/Images/X7zGEwzJ1eZjD7UsBTEHVUzjc5myIIi4mpEIjQX9.png",
           },
           {
-            title: "Golden Bells Academy",
-            link: "https://goldenbellsacademy.com",
+            title: "Ai Chatbot",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/goldenbellsacademy.png",
+              "https://api.alexsama.tech/storage/Images/b4Kc68I0R3shldo4Nb82vaxuGV4rFe0P2hwTQPAV.png",
           },
           {
-            title: "Invoker Labs",
-            link: "https://invoker.lol",
+            title: "Ai Chatbot",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/invoker.png",
+              "https://api.alexsama.tech/storage/Images/K96XOtkms50VR2EXlR533oy8oVZtanALs9UR7BFR.png",
           },
           {
-            title: "E Free Invoice",
-            link: "https://efreeinvoice.com",
+            title: "Feedback",
+            link: "https://autism.yunghao.link",
             thumbnail:
-              "https://aceternity.com/images/products/thumbnails/new/efreeinvoice.png",
+              "https://api.alexsama.tech/storage/Images/Ft4uo8an6FTUwXmPBnRpgMxyb9h0ZoakQ0OnZMg4.png",
           },
         ]}
       />

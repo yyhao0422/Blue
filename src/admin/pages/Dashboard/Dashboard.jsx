@@ -5,6 +5,7 @@ import { Card } from "@mui/material";
 import { format } from "date-fns";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { LineChart, Line } from "recharts";
+import { CardContent } from "@mui/material";
 import { PieChart, Pie, Cell } from "recharts";
 import moment from "moment";
 
@@ -346,6 +347,42 @@ function Dashboard() {
                   />
                 </LineChart>
               </Card>
+              <div
+                className="p-3  w-full bg-blue-400 rounded-xl"
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-around",
+                }}
+              >
+                <div className="w-full flex justify-center items-center">
+                  <Typography
+                    variant="h4"
+                    className="text-center my-3 bg-white rounded-xl w-fit p-2"
+                    component="h1"
+                    sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+                  >
+                    Comment Section
+                  </Typography>
+                </div>
+
+                {statsData?.feedbackData?.map((item, index) => (
+                  <Card
+                    key={index}
+                    style={{
+                      margin: "1rem",
+                      width: "30%",
+                      backgroundColor: index % 2 === 0 ? "#E6E6E6" : "#F2F2F2",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="h6" component="p">
+                        {item.comment}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
