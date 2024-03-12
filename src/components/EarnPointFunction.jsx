@@ -28,7 +28,7 @@ export const fetchUserDetailAndAddPoint = async (user) => {
     });
     if (!res.ok) throw new Error(data.message);
     const data = await res.json();
-    console.log("data", data);
+    return data;
   } catch (err) {
     console.error(err);
   }

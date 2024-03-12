@@ -9,8 +9,10 @@ import {
   gameIcon,
   chatIcon,
   settingIcon,
+  rewardIcon,
   testIcon,
   videoIcon,
+  feedbackIcon,
 } from "./components/icon";
 import { useEffect, useState } from "react";
 import ErrorMessage from "./components/ErrorMessage";
@@ -65,11 +67,12 @@ export default function RootLayout({ children }) {
               <SidebarItem icon={homeIcon} text="Home" />
               <SidebarItem icon={videoIcon} text="Video" />
               <SidebarItem icon={cardIcon} text="Flash Card" />
-              <SidebarItem icon={cardIcon} text="Rewards" />
+              <SidebarItem icon={rewardIcon} text="Rewards" />
               <SidebarItem icon={gameIcon} text="Mini Game" />
               <SidebarItem icon={testIcon} text="Autism Test" />
               <SidebarItem icon={chatIcon} text="AI Chat" />
               <hr className="my-3" />
+              <SidebarItem icon={feedbackIcon} text="Feedback" />
               <SidebarItem icon={settingIcon} text="Settings" />
             </Sidebar>
 

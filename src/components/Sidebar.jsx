@@ -20,7 +20,7 @@ export default function Sidebar({ children }) {
       const windowWidth = window.innerWidth;
       const cursorPosition = e.clientX;
 
-      if (cursorPosition < windowWidth / 2) {
+      if (cursorPosition < windowWidth / 6) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -122,7 +122,7 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
       const windowWidth = window.innerWidth;
       const cursorPosition = e.clientX;
 
-      if (cursorPosition < windowWidth / 2) {
+      if (cursorPosition < windowWidth / 6) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -147,7 +147,9 @@ export function SidebarItem({ icon, text, active, alert, isAdmin }) {
       end
     >
       <li className="group relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors active:bg-gradient-to-tr active:from-indigo-200 active:to-indigo-100 active:text-indigo-800 hover:bg-indigo-50 dark:text-white hover:text-indigo-800">
-        {isVisible && <i className="dark:bg-white rounded-3xl">{icon}</i>}
+        {isVisible && (
+          <i className="dark:bg-white rounded-lg px-2 p-[5px]">{icon}</i>
+        )}
         <span
           className={`overflow-hidden transition-all  ${
             isExpended ? "w-52 ml-3" : " w-0"

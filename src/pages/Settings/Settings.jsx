@@ -44,7 +44,7 @@ export default function Settings() {
       {ClerkCtx.isAdmin && (
         <div className="flex items-center  my-10">
           <p className=" mr-5">Administrator login: </p>
-          <Link to="/admin">
+          <Link to="/admin/dashboard">
             <Button variant="contained">Switch to admin page</Button>
           </Link>
         </div>

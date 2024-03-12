@@ -83,6 +83,23 @@ function TicTacToe() {
   useEffect(() => {
     if (winner || hasDraw) {
       fetchUserDetailAndAddPoint(user);
+      async function postGameStats() {
+        const res = await fetch(
+          "https://api.alexsama.tech/api/mini-game-statistic",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              clerkId: user.id,
+            },
+            body: JSON.stringify({
+              miniGameType: "tictactoe",
+              playCount: 1,
+            }),
+          }
+        );
+      }
+      postGameStats();
     }
   }, [winner, hasDraw, user]);
 

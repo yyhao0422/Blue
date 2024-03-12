@@ -17,6 +17,7 @@ import TicTacToeMenu from "./pages/Mini Game/TicTacToe/TicTacToeMenu";
 
 import Settings from "./pages/Settings/Settings";
 import Video from "./pages/Video/Video";
+import Feedback from "./pages/Feedback/Feedback";
 import ErrorPage from "./pages/ErrorPage";
 
 import AdminLayout from "./AdminLayout";
@@ -41,13 +42,13 @@ export const router = createBrowserRouter([
       { path: "/flashcard/:flashCardId", element: <CardContent /> },
       { path: "/minigame/tictactoe/home", element: <TicTacToeMenu /> },
       { path: "/minigame/tictactoe/play", element: <TicTacToe /> },
+      { path: "/feedback", element: <Feedback /> },
     ],
   },
   {
     path: "/admin",
     element: <AdminLayout />,
     children: [
-      { index: true, element: <AdminHome /> },
       { path: "flashcard", element: <AdminFlashCard /> },
       { path: "autismtest", element: <AdminAutismTest /> },
       { path: "video", element: <AdminVideo /> },

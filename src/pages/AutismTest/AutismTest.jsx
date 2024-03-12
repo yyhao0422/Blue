@@ -60,7 +60,9 @@ export default function AutismTest() {
   return (
     <div className="flex flex-col">
       {!isLoading && (
-        <h1 className="text-center font-bold text-5xl mt-5">Autism Test</h1>
+        <h1 className="text-center font-bold text-5xl mt-5 dark:text-white">
+          Autism Test
+        </h1>
       )}
 
       {isLoading && (

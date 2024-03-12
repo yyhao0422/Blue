@@ -18,7 +18,9 @@ export default function MiniGame() {
 
   return (
     <div className="w-full flex flex-col">
-      <h1 className="text-center font-bold text-5xl m-10">Mini Game</h1>
+      <h1 className="text-center font-bold text-5xl m-10 dark:text-white">
+        Mini Game
+      </h1>
       <div className="flex justify-center">
         <Card
           title="Tic Tac toe"
