@@ -11,6 +11,7 @@ import {
   testIcon,
   videoIcon,
   backIcon,
+  dashboardIcon,
 } from "./components/icon";
 import ErrorMessage from "./components/ErrorMessage";
 
@@ -63,17 +64,17 @@ export default function AdminLayout({ children }) {
         <AdminClerkContext.Provider value={{ user: user, isAdmin: isAdmin }}>
           <main className="flex">
             <Sidebar>
-              <SidebarItem icon={homeIcon} text="Home" isAdmin={true} />
               <SidebarItem icon={videoIcon} text="Video" isAdmin={true} />
               <SidebarItem icon={cardIcon} text="Flash Card" isAdmin={true} />
-              <SidebarItem
-                icon={testIcon}
-                text="Autism Test"
-                isAdmin={true}
-                alert
-              />
+              <SidebarItem icon={testIcon} text="Autism Test" isAdmin={true} />
               <br />
               <hr />
+
+              <SidebarItem
+                icon={dashboardIcon}
+                text="Dashboard"
+                isAdmin={true}
+              />
               <SidebarItem
                 icon={backIcon}
                 text="Back To User"

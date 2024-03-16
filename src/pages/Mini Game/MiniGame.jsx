@@ -1,6 +1,8 @@
 import { useSession } from "@clerk/clerk-react";
+import { motion } from "framer-motion";
+
 import Card from "../../components/Card";
-import TicTacToe from "./TicTacToe/game-logo.png";
+import TicTacToe from "../../images/tictactoe.png";
 
 export default function MiniGame() {
   const { isLoaded, session, isSignedIn } = useSession();
@@ -16,15 +18,16 @@ export default function MiniGame() {
 
   return (
     <div className="w-full flex flex-col">
-      <h1 className="text-center font-bold text-5xl mt-5">Mini Game</h1>
-      <div className="flex w-fit">
+      <h1 className="text-center font-bold text-5xl m-10 dark:text-white">
+        Mini Game
+      </h1>
+      <div className="flex justify-center">
         <Card
           title="Tic Tac toe"
           image={TicTacToe}
-          link="/minigame/tictactoe"
+          link="/minigame/tictactoe/home"
           alt="TicTacToe"
         />
-        <Card title="Constructing" pathToImage="" link="/flashcard/t" />
       </div>
     </div>
   );

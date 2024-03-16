@@ -1,10 +1,30 @@
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { Typography } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import TableContainer from "@mui/material/TableContainer";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { Card } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 
 function ExistTestQuestion({ id, count, question, setRefresh }) {
   const { user } = useUser();
-  const editModel = useRef();
+
+  const [open, setOpen] = useState(false);
   const [input, setInput] = useState({});
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [isLoadingEdit, setIsLoadingEdit] = useState(false);
@@ -41,10 +61,10 @@ function ExistTestQuestion({ id, count, question, setRefresh }) {
   }
 
   function openEditModel() {
-    editModel.current.showModal();
+    setOpen(true);
   }
   function closeEditModel() {
-    editModel.current.close();
+    setOpen(false);
   }
 
   async function handleEditAction(event) {
@@ -81,66 +101,78 @@ function ExistTestQuestion({ id, count, question, setRefresh }) {
 
   return (
     <>
-      <div className="flex justify-between items-center my-2 ">
-        <h1 className="mr-3 whitespace-nowrap">Question No {count} :</h1>
-        <div className="flex w-full border h-20 py-2 px-2 rounded-md">
-          <div className="flex items-center mx-2 w-1/2">
-            <label className="text-nowrap">Question :</label>
-            <p className="mx-3">{question[count - 1].question}</p>
-          </div>
-          <div className="flex items-center mx-2 w-1/2">
-            <label className="text-nowrap">Description :</label>
-            <p className="mx-3">{question[count - 1].description}</p>
-          </div>
-        </div>
-        <button type="button" className="mx-2" onClick={openEditModel}>
-          Edit
-        </button>
-        <button
-          type="button"
-          className="
-      mx-2"
-          onClick={handleDeleteAction}
-        >
-          Delete
-        </button>
-      </div>
-      <dialog ref={editModel}>
-        <form method="dialog">
-          <h1 className="mt-2 mb-4 text-center bold">Edit Question</h1>
-          <div className="p-3">
-            <h1>Question No: {count}</h1>
-          </div>
-          <div className="p-3 flex justify-between">
-            <label>Question :</label>
-            <input
-              className="border mx-2 ml-10 w-96"
-              type="text"
-              name="question"
-              placeholder={question[count - 1].question}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="p-3 flex justify-between">
-            <label>Description :</label>
-            <input
-              className="border mx-2 ml-10 w-96"
-              type="text"
-              name="description"
-              placeholder={question[count - 1].description}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex justify-around m-4 ">
-            <button type="submit" onClick={handleEditAction}>
+      <TableBody>
+        <TableRow>
+          <TableCell className="mr-3 whitespace-nowrap">{count}</TableCell>
+          <TableCell align="left">{question[count - 1].question}</TableCell>
+          <TableCell align="left">{question[count - 1].description}</TableCell>
+          <TableCell align="left">
+            <Button type="button" className="mx-2" onClick={openEditModel}>
               Edit
-            </button>
-            <button type="button" onClick={closeEditModel}>
+            </Button>
+            <Button
+              type="button"
+              className="
+      mx-2"
+              onClick={handleDeleteAction}
+            >
+              Delete
+            </Button>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+      <Dialog
+        open={open}
+        className="p-3"
+        onSubmit={handleEditAction}
+        onClose={closeEditModel}
+        PaperProps={{
+          component: "form",
+        }}
+      >
+        <DialogTitle className="mt-2 mb-4 text-center bold">
+          Edit Question No {count}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please fill the form to edit the question.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="question"
+            name="question"
+            label="Question"
+            type="text"
+            fullWidth
+            variant="standard"
+            placeholder={question[count - 1].question}
+            onChange={handleChange}
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="description"
+            name="description"
+            label="Description"
+            type="text"
+            fullWidth
+            variant="standard"
+            placeholder={question[count - 1].description}
+            onChange={handleChange}
+          />
+          <DialogActions>
+            <Button type="submit" onClick={handleEditAction}>
+              Edit
+            </Button>
+            <Button type="button" onClick={closeEditModel}>
               Close
-            </button>
-          </div>
-        </form>
-      </dialog>
+            </Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -60,13 +60,13 @@ export default function AutismTest() {
   return (
     <div className="flex flex-col">
       {!isLoading && (
-        <h1 className="text-center font-bold text-5xl mt-5">Autism Test</h1>
+        <h1 className="text-center font-bold text-5xl mt-5 dark:text-white">
+          Autism Test
+        </h1>
       )}
 
       {isLoading && (
-        <div className="postion absolute left-[700px] top-[300px]">
-          <img src={loader} alt="loading.gif" height="100" width="100" />
-        </div>
+        <img src={loader} alt="loading.gif" height="100" width="100" />
       )}
 
       <motion.div

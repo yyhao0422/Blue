@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import Card from "@mui/material/Card";
 import { motion } from "framer-motion";
 import CardContent from "@mui/material/CardContent";
@@ -7,7 +8,13 @@ import CardContent from "@mui/material/CardContent";
 import ErrorMessage from "../../components/ErrorMessage";
 import loader from "../../images/loader.gif";
 import { ClerkContext } from "../../store/clerk-user-context";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, LinearProgress } from "@mui/material";
+import Box from "@mui/material/Box";
+import Confetti from "react-dom-confetti";
+import {
+  fetchUserDetailAndAddPoint,
+  EarnPointFunction,
+} from "../../components/EarnPointFunction";
 
 function Quiz() {
   const { testId } = useParams();
@@ -102,62 +109,123 @@ function Quiz() {
     setActiveQuestionIndex((prev) => prev + 1);
   }
 
+  function LinearProgressWithLabel(props) {
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box sx={{ width: "100%", mr: 1 }}>
+          <LinearProgress variant="determinate" {...props} />
+        </Box>
+        <Box sx={{ minWidth: 35 }}>
+          <Typography variant="body2" color="text.secondary">{`${Math.round(
+            props.value
+          )}%`}</Typography>
+        </Box>
+      </Box>
+    );
+  }
+
+  LinearProgressWithLabel.propTypes = {
+    /**
+     * The value of the progress indicator for the determinate and buffer variants.
+     * Value between 0 and 100.
+     */
+    value: PropTypes.number.isRequired,
+  };
+
   // if (error !== null) {
   //   return <ErrorMessage errorMessage="Fail to fetch Autism Test Data" />;
   // }
+  useEffect(() => {
+    async function postAutismTestStats() {
+      const res = await fetch(`https://api.alexsama.tech/api/users/details`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ClerkId: clerkId,
+        },
+      });
+      const resData = await res.json();
+      await fetch("https://api.alexsama.tech/api/autism-test-statistic", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ClerkId: clerkId,
+        },
+        body: JSON.stringify({
+          score: userScore,
+          autismTestId: testId,
+          playerId: resData.data.id,
+        }),
+      });
+    }
+
+    if (
+      Object.keys(targetTestContent).length !== 0 &&
+      activeQuestionIndex >= targetTestContent?.length
+    ) {
+      fetchUserDetailAndAddPoint(ClerkCtx);
+      postAutismTestStats();
+    }
+  });
 
   if (
     Object.keys(targetTestContent).length !== 0 &&
     activeQuestionIndex >= targetTestContent?.length
   ) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        transition={{ delay: 0.5 }}
-        animate={{ opacity: 1, y: -100 }}
-        exit={{ opacity: 0 }}
-        className="h-min m-auto  "
-      >
-        <Card
-          sx={{
-            maxWidth: "500px",
-          }}
-          className="p-5 leading-6"
+      <>
+        <EarnPointFunction />
+        <motion.div
+          initial={{ opacity: 0 }}
+          transition={{ delay: 0.5 }}
+          animate={{ opacity: 1, y: -100 }}
+          exit={{ opacity: 0 }}
+          className="h-min m-auto"
         >
-          <Typography
-            variant="h3"
-            sx={{ marginBottom: 5 }}
-            className="text-center"
+          {userScore >= 6 && <Confetti active={true} />}
+          <Card
+            sx={{
+              maxWidth: "500px",
+            }}
+            className="p-5 leading-6"
           >
-            Your score is{" "}
-            <span
-              className={`${userScore <= 6 ? "text-red-400" : "text-blue-400"}`}
-            >{`${userScore}`}</span>
-          </Typography>
-          <hr />
-          <div>
-            <Typography variant="subtitle1" sx={{ margin: 3 }}>
-              {userScore <= 6
-                ? "Consider referring them for a specialist diagnostic assessment."
-                : "H'She are normal or mild, consider referring them for a specialist diagnostic assessment for more detail"}
+            <Typography
+              variant="h3"
+              sx={{ marginBottom: 5 }}
+              className="text-center"
+            >
+              Your score is
+              <span
+                className={`${
+                  userScore <= 6 ? "text-red-400" : "text-blue-400"
+                }`}
+              >{` ${userScore}`}</span>
             </Typography>
-            <br />
-            <Typography variant="caption">
-              <span className="text-bold">USE:</span>
-              This is the adolescent version of the test recommended in the NICE
-              clinical guideline CG142.{" "}
-              <a
-                href="//www.nice.org.uk/CG142"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-blue-500"
-              >
-                www.nice.org.uk/CG142
-              </a>
-            </Typography>
-          </div>
-        </Card>
-      </motion.div>
+            <hr />
+            <div>
+              <Typography variant="subtitle1" sx={{ margin: 3 }}>
+                {userScore <= 6
+                  ? "Consider referring them for a specialist diagnostic assessment."
+                  : "H'She are normal or mild, consider referring them for a specialist diagnostic assessment for more detail"}
+              </Typography>
+              <br />
+              <Typography variant="caption">
+                <span className="text-bold">USE:</span>
+                This is the adolescent version of the test recommended in the
+                NICE clinical guideline CG142.{" "}
+                <a
+                  href="//www.nice.org.uk/CG142"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-blue-500"
+                >
+                  www.nice.org.uk/CG142
+                </a>
+              </Typography>
+            </div>
+          </Card>
+        </motion.div>
+      </>
     );
   }
 
@@ -174,15 +242,18 @@ function Quiz() {
           transition={{ delay: 0.5 }}
           animate={{ opacity: 1, y: -100 }}
           exit={{ opacity: 0 }}
-          className="h-min m-auto  "
+          className="h-min m-auto w-[1000px] "
         >
+          <Box sx={{ width: "100%", marginBottom: 10 }}>
+            <LinearProgressWithLabel value={activeQuestionIndex * 10} />
+          </Box>
           <Card
             sx={{
               maxWidth: "1000px",
             }}
             className="p-5 leading-6"
           >
-            <h1 className="text-3xl text-center mb-4">
+            <h1 className="text-3xl  text-center mb-4">
               <span className="mr-3 ">{`Question ${
                 activeQuestionIndex + 1
               } :`}</span>
@@ -235,8 +306,10 @@ function Quiz() {
         </motion.div>
       )}
 
-      <div className="position absolute bottom-0 right-0 p-3 m-5 bg-blue-300 hover:bg-blue-500 rounded-lg">
-        <Link to="/autismtest">Exit Test</Link>
+      <div className="position absolute bottom-0 right-0 p-3 m-5">
+        <Link to="/autismtest">
+          <Button variant="outlined">Exit Test</Button>
+        </Link>
       </div>
     </>
   );

@@ -1,9 +1,26 @@
 import { useRef, useState, useEffect, useContext } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { styled } from "@mui/material/styles";
+import TableContainer from "@mui/material/TableContainer";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import { Card, Typography } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import ExistRecord from "./ExistRecord";
 import { AdminClerkContext } from "../../../store/admin-clerk-user-context";
 
 function FlashCard() {
-  const newFlashCardDialog = useRef();
   const [flashCardData, setFlashCardData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -12,6 +29,7 @@ function FlashCard() {
   const [refresh, setRefresh] = useState(false);
   const AdminClerkCtx = useContext(AdminClerkContext);
   const AdminId = AdminClerkCtx.user.id;
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function fetchFlashCardData() {
@@ -49,15 +67,25 @@ function FlashCard() {
 
   // New Button
   function handleNewFlashCard() {
-    newFlashCardDialog.current.showModal();
+    setOpen(true);
   }
 
   function closeNewFlashCard() {
-    newFlashCardDialog.current.close();
+    setOpen(false);
     setNewFlashCardResult("");
   }
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
 
-  // Submit form
   async function saveNewFlashCard(event) {
     // Prevent Default Behavior form submit
     event.preventDefault();
@@ -69,6 +97,7 @@ function FlashCard() {
     uploadImageHeaders.append("ClerkId", AdminId);
     uploadImageHeaders.append("Accept", "application/json");
     // Image data
+
     const imageFile = fd.get("upload"); // File that  get from form data
     const bodyImage = new FormData(); // Create a new form data that needed to pass in to body
     bodyImage.append("upload", imageFile);
@@ -131,98 +160,144 @@ function FlashCard() {
 
   return (
     <>
-      <div className="bg-cyan-400 p-3 h-fit m-3 rounded-md w-screen">
+      <div className=" p-3 h-fit m-3 rounded-md w-screen">
         <div className="flex justify-between">
-          <h1 className="text-xl ">Flash Card Maintainance</h1>
-          <button
-            className="bg-cyan-700 hover:bg-cyan-900 text-white p-3 rounded-xl"
-            onClick={handleNewFlashCard}
+          <Typography
+            variant="h3"
+            className="text-xl text-bold text-center m-3"
           >
+            Flash Card Maintainance
+          </Typography>
+          <Button variant="contained" onClick={handleNewFlashCard}>
             New Flashcard
-          </button>
+          </Button>
         </div>
 
-        <table className="m-3 ">
-          <thead>
-            <tr>
-              <th className="p-2">Flash Card ID</th>
-              <th className="p-2">Flash Card Title</th>
-              <th className="p-2">Image Src</th>
-              <th className="p-2">Alt</th>
-              <th className="p-2">Action</th>
-            </tr>
-          </thead>
+        <TableContainer sx={{ padding: 3 }} component={Paper}>
+          <Table
+            sx={{ minWidth: 650 }}
+            aria-label="simple table"
+            className="m-3 "
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell className="p-2">Flash Card ID</TableCell>
+                <TableCell align="right" className="p-2">
+                  Flash Card Title
+                </TableCell>
+                <TableCell align="right" className="p-2">
+                  Image Src
+                </TableCell>
+                <TableCell align="right" className="p-2">
+                  Alt
+                </TableCell>
+                <TableCell align="right" className="p-2">
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
 
-          <tbody>
-            {isLoading && <p>Loading</p>}
-            {Object.keys(flashCardData).length !== 0 &&
-              !isLoading &&
-              flashCardData.map((recordData) => {
-                return (
-                  <ExistRecord
-                    key={recordData.id}
-                    recordDataId={recordData.id}
-                    AdminId={AdminId}
-                    refreshParentFlashCard={() => {
-                      setRefresh((prev) => !prev);
-                    }}
-                  />
-                );
-              })}
-          </tbody>
-        </table>
+            <TableBody>
+              {isLoading && (
+                <LoadingButton sx={{ width: 20 }} loading>
+                  Loading ...
+                </LoadingButton>
+              )}
+              {Object.keys(flashCardData).length !== 0 &&
+                !isLoading &&
+                flashCardData.map((recordData) => {
+                  return (
+                    <ExistRecord
+                      key={recordData.id}
+                      recordDataId={recordData.id}
+                      AdminId={AdminId}
+                      refreshParentFlashCard={() => {
+                        setRefresh((prev) => !prev);
+                      }}
+                    />
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
       {/* ----------------New Dialog ---------------- */}
-      <dialog ref={newFlashCardDialog} className="p-3 rounded-lg">
-        <h1 className="mt-2 mb-4">New Flash Card</h1>
-        {isNewFlashCardLoading && <p>Submit in progress ...</p>}
+      <Dialog
+        className="p-3 rounded-lg"
+        open={open}
+        onSubmit={saveNewFlashCard}
+        onClose={closeNewFlashCard}
+        PaperProps={{
+          component: "form",
+        }}
+      >
+        <DialogTitle>New Flash Card</DialogTitle>
+        {isNewFlashCardLoading && (
+          <LoadingButton loading>Loading ...</LoadingButton>
+        )}
         {!isNewFlashCardLoading && newFlashCardResult === "" && (
-          <form onSubmit={saveNewFlashCard}>
-            <div className="flex flex-col">
-              <div className="flex justify-between items-center">
-                <label>Title :</label>
-                <input
-                  type="text"
-                  className="m-2 border"
-                  required
-                  name="title"
-                />
-              </div>
-              <div className="flex justify-between items-center">
-                <label>Alt :</label>
-                <input
-                  type="text"
-                  className="m-2 border"
-                  required
-                  name="description"
-                />
-              </div>
-              <div className="flex justify-between items-center">
-                <label>Image Src :</label>
-                <input
+          <DialogContent>
+            <DialogContentText>
+              Please fill the form to create a new flash card.
+            </DialogContentText>
+
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="title"
+              name="title"
+              label="Title"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="description"
+              name="description"
+              label="Description"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+
+            <div className="flex justify-between items-center">
+              <label>
+                <Typography>Image Src :</Typography>
+              </label>
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload Image
+                <VisuallyHiddenInput
                   type="file"
                   accept=".png, .jpg, .jpeg, .gif "
-                  className="m-2 border"
                   required
                   name="upload"
                 />
-              </div>
+              </Button>
             </div>
-            <div className="flex justify-between m-3">
-              <button>Save</button>
-              <button type="button" onClick={closeNewFlashCard}>
+
+            <DialogActions>
+              <Button type="submit">Save</Button>
+              <Button type="button" onClick={closeNewFlashCard}>
                 Close
-              </button>
-            </div>
-          </form>
+              </Button>
+            </DialogActions>
+          </DialogContent>
         )}
         {newFlashCardResult !== "" && (
-          <div>
-            <p>{newFlashCardResult}</p>
-            <button onClick={closeNewFlashCard}>Close</button>
-          </div>
+          <Card className="w-96 p-3 ">
+            <Typography className="mb-10">{newFlashCardResult}</Typography>
+            <Button onClick={closeNewFlashCard}>Close</Button>
+          </Card>
         )}
-      </dialog>
+      </Dialog>
     </>
   );
 }
